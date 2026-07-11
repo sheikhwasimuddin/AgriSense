@@ -1,0 +1,106 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from db import models, schemas
+from uuid import UUID
+
+async def get_user_by_email(db: AsyncSession, email: str):
+    result = await db.execute(select(models.User).filter(models.User.email == email))
+    return result.scalars().first()
+
+async def create_user(db: AsyncSession, user: schemas.UserCreate, hashed_password: str):
+    db_user = models.User(
+        email=user.email,
+        full_name=user.full_name,
+        phone=user.phone,
+        role=user.role,
+        hashed_password=hashed_password
+    )
+    db.add(db_user)
+    await db.commit()
+    await db.refresh(db_user)
+    return db_user
+
+async def get_farms(db: AsyncSession, user_id: UUID):
+    result = await db.execute(select(models.Farm).filter(models.Farm.user_id == user_id))
+    return result.scalars().all()
+
+async def get_farm(db: AsyncSession, farm_id: int):
+    result = await db.execute(select(models.Farm).filter(models.Farm.id == farm_id))
+    return result.scalars().first()
+
+async def create_farm(db: AsyncSession, farm: schemas.FarmCreate, user_id: UUID):
+    db_farm = models.Farm(**farm.model_dump(), user_id=user_id)
+    db.add(db_farm)
+    await db.commit()
+    await db.refresh(db_farm)
+    return db_farm
+
+async def delete_farm(db: AsyncSession, farm_id: int):
+    farm = await get_farm(db, farm_id)
+    if farm:
+        await db.delete(farm)
+        await db.commit()
+        return True
+    return False
+
+async def create_sensor_data(db: AsyncSession, sensor_data: schemas.SensorDataCreate):
+    db_sensor = models.SensorData(**sensor_data.model_dump())
+    db.add(db_sensor)
+    await db.commit()
+    await db.refresh(db_sensor)
+    return db_sensor
+
+async def get_latest_sensor_data(db: AsyncSession, farm_id: int):
+    result = await db.execute(
+        select(models.SensorData)
+        .filter(models.SensorData.farm_id == farm_id)
+        .order_by(models.SensorData.timestamp.desc())
+        .limit(1)
+    )
+    return result.scalars().first()
+
+async def create_yield_prediction(db: AsyncSession, farm_id: int, request: schemas.YieldPredictionRequest, prediction: float):
+    db_pred = models.YieldPrediction(
+        farm_id=farm_id,
+        crop=request.Item,
+        year=request.Year,
+        rainfall=request.average_rain_fall_mm_per_year,
+        temperature=request.avg_temp,
+        pesticides=request.pesticides_tonnes,
+        predicted_yield=prediction
+    )
+    db.add(db_pred)
+    await db.commit()
+    await db.refresh(db_pred)
+    return db_pred
+
+async def get_yield_predictions(db: AsyncSession, farm_id: int):
+    result = await db.execute(
+        select(models.YieldPrediction)
+        .filter(models.YieldPrediction.farm_id == farm_id)
+        .order_by(models.YieldPrediction.created_at.desc())
+        .limit(20)
+    )
+    return result.scalars().all()
+
+async def create_disease_prediction(db: AsyncSession, farm_id: int, image_url: str, disease: str, confidence: float, recommendation: str):
+    db_pred = models.DiseasePrediction(
+        farm_id=farm_id,
+        image_url=image_url,
+        disease=disease,
+        confidence=confidence,
+        recommendation=recommendation
+    )
+    db.add(db_pred)
+    await db.commit()
+    await db.refresh(db_pred)
+    return db_pred
+
+async def get_disease_predictions(db: AsyncSession, farm_id: int):
+    result = await db.execute(
+        select(models.DiseasePrediction)
+        .filter(models.DiseasePrediction.farm_id == farm_id)
+        .order_by(models.DiseasePrediction.created_at.desc())
+        .limit(20)
+    )
+    return result.scalars().all()
