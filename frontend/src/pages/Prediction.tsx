@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, TrendingUp, Sprout, Droplets, Thermometer, Bug, MapPin, Calendar, Wheat } from "lucide-react";
+import { Loader2, TrendingUp, Sprout, Droplets, Thermometer, Bug, MapPin, Calendar, Wheat, Volume2, Square, Bot } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const formSchema = z.object({
@@ -25,7 +25,10 @@ const formSchema = z.object({
 
 export default function Prediction() {
   const [result, setResult] = useState<number | null>(null);
+  const [resultTonnes, setResultTonnes] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [aiExplanation, setAiExplanation] = useState<string>("");
+  const [isPlaying, setIsPlaying] = useState(false);
   
   const queryClient = useQueryClient();
   
@@ -57,16 +60,48 @@ export default function Prediction() {
     enabled: !!selectedFarmId && selectedFarmId !== "none" && selectedFarmId !== "",
   });
 
+  function generateAIExplanation(values: any, tonnes: number) {
+    return `Hello! Based on your environmental inputs for ${values.Area}, if you plant ${values.Item} with an average rainfall of ${values.average_rain_fall_mm_per_year} millimeters and an average temperature of ${values.avg_temp} degrees Celsius, our Artificial Intelligence model predicts an estimated yield of ${tonnes.toFixed(2)} tonnes per hectare.`;
+  }
+
+  function toggleAudio() {
+    if (isPlaying) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+    } else {
+      window.speechSynthesis.cancel(); // clear any previous speech
+      const utterance = new SpeechSynthesisUtterance(aiExplanation);
+      utterance.rate = 0.95; // slightly slower for better comprehension
+      utterance.onend = () => setIsPlaying(false);
+      window.speechSynthesis.speak(utterance);
+      setIsPlaying(true);
+    }
+  }
+
   const predictMutation = useMutation({
     mutationFn: predictionService.predictYield,
     onSuccess: (data) => {
-      setResult(data.prediction);
+      const yieldInHg = data.prediction;
+      const yieldInTonnes = yieldInHg / 10000;
+      
+      setResult(yieldInHg);
+      setResultTonnes(yieldInTonnes);
+      setAiExplanation(generateAIExplanation(form.getValues(), yieldInTonnes));
       setError(null);
+      
+      // Stop any playing audio if new prediction comes in
+      if (isPlaying) {
+        window.speechSynthesis.cancel();
+        setIsPlaying(false);
+      }
+      
       queryClient.invalidateQueries({ queryKey: ["yieldHistory"] });
     },
     onError: (err: any) => {
       setError(err?.response?.data?.detail || "Prediction failed. Please try again.");
       setResult(null);
+      setResultTonnes(null);
+      setAiExplanation("");
     },
   });
 
@@ -360,9 +395,10 @@ export default function Prediction() {
                     <div className="py-8 px-6 bg-gradient-to-br from-emerald-500/10 via-background/50 to-teal-500/10 rounded-2xl border border-emerald-500/20 shadow-inner">
                       <span className="block text-sm text-muted-foreground mb-3 uppercase tracking-wider">Estimated Yield</span>
                       <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400">
-                        {result.toFixed(2)}
+                        {resultTonnes?.toFixed(2)}
                       </span>
-                      <span className="block text-lg font-medium mt-2 text-muted-foreground">hg / ha</span>
+                      <span className="block text-lg font-medium mt-2 text-muted-foreground">Tonnes / Hectare</span>
+                      <span className="block text-xs text-muted-foreground mt-2 opacity-60">({result.toFixed(2)} hg/ha)</span>
                     </div>
                     
                     {/* Model Info */}
@@ -375,6 +411,32 @@ export default function Prediction() {
                         <span className="text-xs text-muted-foreground block">Accuracy</span>
                         <span className="text-sm font-semibold text-emerald-400">98.89% R²</span>
                       </div>
+                    </div>
+
+                    {/* AI Insights Panel */}
+                    <div className="mt-6 text-left border border-emerald-500/30 bg-emerald-500/5 rounded-xl p-5 relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2 text-emerald-400 font-semibold">
+                          <Bot className="h-5 w-5" />
+                          AI Explanation
+                        </div>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="h-8 border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10"
+                          onClick={toggleAudio}
+                        >
+                          {isPlaying ? (
+                            <><Square className="h-4 w-4 mr-2 fill-current" /> Stop</>
+                          ) : (
+                            <><Volume2 className="h-4 w-4 mr-2" /> Read Aloud</>
+                          )}
+                        </Button>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {aiExplanation}
+                      </p>
                     </div>
                   </motion.div>
                 ) : (
