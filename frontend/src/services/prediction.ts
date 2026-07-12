@@ -3,7 +3,6 @@ import type {
   YieldPredictionRequest, 
   YieldPredictionResponse,
   YieldPredictionHistory,
-  DiseasePredictionRequest,
   DiseasePredictionResponse
 } from "../types";
 
@@ -18,8 +17,10 @@ export const predictionService = {
     return response.data;
   },
 
-  predictDisease: async (data: DiseasePredictionRequest): Promise<DiseasePredictionResponse> => {
-    const response = await api.post<DiseasePredictionResponse>("/disease/predict", data);
+  predictDisease: async (formData: FormData): Promise<DiseasePredictionResponse> => {
+    const response = await api.post<DiseasePredictionResponse>("/disease/predict", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
     return response.data;
   },
 

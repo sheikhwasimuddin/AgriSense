@@ -13,7 +13,8 @@ import type { DiseasePredictionResponse } from "@/types";
 export default function Disease() {
   const queryClient = useQueryClient();
   const [selectedFarmId, setSelectedFarmId] = useState<string>("none");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
   const [result, setResult] = useState<DiseasePredictionResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,17 +43,28 @@ export default function Disease() {
   });
 
   function handlePredict() {
-    if (!imageUrl) {
-      setError("Please provide an image URL");
+    if (!imageFile) {
+      setError("Please provide an image file");
       return;
     }
     
-    const payload: any = { image_url: imageUrl };
+    const formData = new FormData();
+    formData.append("file", imageFile);
+    
     if (selectedFarmId && selectedFarmId !== "none") {
-      payload.farm_id = parseInt(selectedFarmId);
+      formData.append("farm_id", selectedFarmId);
     }
     
-    predictMutation.mutate(payload);
+    predictMutation.mutate(formData as any);
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+      setResult(null);
+    }
   }
 
   const containerVariants = {
@@ -119,23 +131,23 @@ export default function Disease() {
               </div>
 
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-medium">
-                  <ImageIcon className="h-3.5 w-3.5 text-blue-400" />
-                  Image URL
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                  <ImageIcon className="h-3.5 w-3.5 text-blue-400" /> Image Upload
                 </label>
-                <Input 
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="https://example.com/leaf-image.jpg" 
-                  className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl hover:border-blue-500/30 transition-colors" 
-                />
-              </div>
-
-              {imageUrl && (
-                <div className="mt-4 rounded-xl overflow-hidden border border-black/10 dark:border-white/10 max-h-64 flex justify-center bg-black/5 dark:bg-white/5">
-                  <img src={imageUrl} alt="Crop Preview" className="object-contain h-full" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                <div className="relative">
+                  <Input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="bg-background/50 border-black/10 dark:border-white/10 h-11 pt-2 rounded-xl focus:border-rose-500/50 cursor-pointer" 
+                  />
+                  {imagePreview && (
+                    <div className="mt-4 rounded-xl overflow-hidden border border-black/10 dark:border-white/10 relative h-48 w-full">
+                      <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
 
               <Button 
                 onClick={handlePredict}
@@ -239,7 +251,7 @@ export default function Disease() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-foreground/60">Ready to analyze</p>
-                      <p className="text-xs text-muted-foreground mt-1">Upload an image URL to detect diseases</p>
+                      <p className="text-muted-foreground text-sm">Please upload an image to detect diseases</p>
                     </div>
                   </motion.div>
                 )}
