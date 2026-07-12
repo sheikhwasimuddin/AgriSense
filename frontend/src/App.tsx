@@ -18,6 +18,7 @@ import Disease from './pages/Disease';
 import Sensors from "./pages/Sensors";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
 
 // Query Client setup
 const queryClient = new QueryClient({
@@ -79,7 +80,7 @@ function App() {
                 <Route path="disease" element={<Disease />} />
                 <Route path="sensors" element={<Sensors />} />
                 <Route path="analytics" element={<Analytics />} />
-                <Route path="profile" element={<Navigate to="/settings" replace />} />
+                <Route path="profile" element={<Profile />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
               
