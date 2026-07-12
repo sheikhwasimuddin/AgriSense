@@ -17,6 +17,7 @@ import Prediction from "./pages/Prediction";
 import Disease from './pages/Disease';
 import Sensors from "./pages/Sensors";
 import Analytics from "./pages/Analytics";
+import Settings from "./pages/Settings";
 
 // Query Client setup
 const queryClient = new QueryClient({
@@ -78,8 +79,8 @@ function App() {
                 <Route path="disease" element={<Disease />} />
                 <Route path="sensors" element={<Sensors />} />
                 <Route path="analytics" element={<Analytics />} />
-                <Route path="profile" element={<div className="p-8 text-muted-foreground">Profile Settings (Coming Soon)</div>} />
-                <Route path="settings" element={<div className="p-8 text-muted-foreground">App Settings (Coming Soon)</div>} />
+                <Route path="profile" element={<Navigate to="/settings" replace />} />
+                <Route path="settings" element={<Settings />} />
               </Route>
               
               <Route path="*" element={<Navigate to="/home" replace />} />
