@@ -37,3 +37,12 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
 @router.get("/profile", response_model=schemas.User)
 async def read_users_me(current_user: models.User = Depends(get_current_active_user)):
     return current_user
+
+@router.put("/profile", response_model=schemas.User)
+async def update_user_profile(
+    user_update: schemas.UserUpdate, 
+    current_user: models.User = Depends(get_current_active_user),
+    db: AsyncSession = Depends(get_db)
+):
+    updated_user = await crud.update_user(db, current_user, user_update)
+    return updated_user

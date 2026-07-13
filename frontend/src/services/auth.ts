@@ -25,4 +25,9 @@ export const authService = {
     const response = await api.get<User>("/auth/profile");
     return response.data;
   },
+
+  updateProfile: async (data: Partial<User>): Promise<User> => {
+    const response = await api.put<User>("/auth/profile", data);
+    return response.data;
+  },
 };

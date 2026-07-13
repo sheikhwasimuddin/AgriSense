@@ -9,8 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Bug, Sprout, Image as ImageIcon, MapPin, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { DiseasePredictionResponse } from "@/types";
+import { useTranslation } from "react-i18next";
 
 export default function Disease() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [selectedFarmId, setSelectedFarmId] = useState<string>("none");
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -91,10 +93,10 @@ export default function Disease() {
         </div>
         <div>
           <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-rose-400 via-red-400 to-orange-400 bg-clip-text text-transparent">
-            Disease Detection
+            {t('disease.title')}
           </h1>
           <p className="text-muted-foreground mt-0.5">
-            AI-powered image analysis to detect crop diseases instantly.
+            {t('disease.subtitle')}
           </p>
         </div>
       </motion.div>
@@ -106,8 +108,8 @@ export default function Disease() {
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rose-500 via-red-400 to-orange-500" />
             
             <CardHeader className="pb-4 pt-6">
-              <CardTitle className="text-xl">Image Analysis</CardTitle>
-              <CardDescription>Upload an image URL of your crop leaf for classification.</CardDescription>
+              <CardTitle className="text-xl">{t('disease.analysis')}</CardTitle>
+              <CardDescription>{t('disease.analysisDesc')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
@@ -132,7 +134,7 @@ export default function Disease() {
 
               <div className="space-y-2">
                 <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                  <ImageIcon className="h-3.5 w-3.5 text-blue-400" /> Image Upload
+                  <ImageIcon className="h-3.5 w-3.5 text-blue-400" /> {t('disease.upload')}
                 </label>
                 <div className="relative">
                   <Input 
@@ -157,12 +159,12 @@ export default function Disease() {
                 {predictMutation.isPending ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Analyzing Image...
+                    {t('disease.scanning')}
                   </>
                 ) : (
                   <>
                     <Search className="mr-2 h-5 w-5" />
-                    Detect Disease
+                    {t('disease.detect')}
                   </>
                 )}
               </Button>
@@ -176,7 +178,7 @@ export default function Disease() {
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500" />
             
             <CardHeader className="text-center pb-2 pt-6">
-              <CardTitle className="text-xl">Analysis Result</CardTitle>
+              <CardTitle className="text-xl">{t('disease.result')}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center h-[calc(100%-80px)] p-6">
               <AnimatePresence mode="wait">
@@ -194,7 +196,7 @@ export default function Disease() {
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-foreground">Scanning for pathogens...</p>
+                      <p className="text-sm font-medium text-foreground">{t('disease.scanning')}</p>
                     </div>
                   </motion.div>
                 ) : error ? (
@@ -209,7 +211,7 @@ export default function Disease() {
                       <span className="text-4xl">⚠️</span>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-red-400">Detection Failed</p>
+                      <p className="text-sm font-medium text-red-400">{t('disease.failed')}</p>
                       <p className="text-xs text-muted-foreground mt-1">{error}</p>
                     </div>
                   </motion.div>

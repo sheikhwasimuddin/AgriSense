@@ -12,6 +12,9 @@ class User(Base):
     full_name = Column(String, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     phone = Column(String)
+    city = Column(String)
+    age = Column(Integer)
+    food_stock = Column(Float)
     role = Column(String, default="Farmer") # Farmer, Agricultural Officer, Admin
     hashed_password = Column(String, nullable=False) # Only if using custom auth instead of pure Supabase
     created_at = Column(DateTime(timezone=True), server_default=func.now())

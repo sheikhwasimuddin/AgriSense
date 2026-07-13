@@ -5,6 +5,7 @@ import { sensorsService } from "@/services/sensors";
 import { analyticsService } from "@/services/analytics";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -62,6 +63,7 @@ const statCardVariants: any = {
 };
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const [selectedFarmId, setSelectedFarmId] = useState<number | null>(null);
 
   const { data: farms, isLoading: farmsLoading } = useQuery({
@@ -263,11 +265,10 @@ export default function Dashboard() {
           </div>
 
           <h2 className="text-3xl font-bold bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent mb-3">
-            Welcome to AgriSense AI
+            {t('dashboard.welcome')}
           </h2>
           <p className="text-slate-900/50 dark:text-white/50 text-base leading-relaxed mb-8">
-            Add your first farm to start monitoring crops and predicting yields
-            with AI-powered analytics.
+            {t('dashboard.subtitle')}
           </p>
           <Link
             to="/farms"
@@ -297,7 +298,7 @@ export default function Dashboard() {
           </div>
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-500 dark:from-white dark:via-white/90 dark:to-white/60 bg-clip-text text-transparent leading-tight">
-              Dashboard
+              {t('nav.dashboard')}
             </h1>
             {activeFarm && (
               <div className="flex items-center gap-1.5 mt-1">
@@ -437,7 +438,7 @@ export default function Dashboard() {
                     >
                       <span className="flex items-center gap-2.5 text-sm text-slate-900/40 dark:text-white/40">
                         <RowIcon className="h-4 w-4 text-slate-900/20 dark:text-white/20" />
-                        {row.label}
+                        {t(`dashboard.details.${row.label.toLowerCase().replace(' ', '_')}`)}
                       </span>
                       <span className="text-sm font-medium text-slate-900/80 dark:text-white/80">
                         {row.value}

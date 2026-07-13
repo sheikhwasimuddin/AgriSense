@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, TrendingUp, Sprout, Droplets, Thermometer, Bug, MapPin, Calendar, Wheat, Volume2, Square, Bot } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const formSchema = z.object({
   farm_id: z.string().optional(),
@@ -24,6 +25,7 @@ const formSchema = z.object({
 });
 
 export default function Prediction() {
+  const { t } = useTranslation();
   const [result, setResult] = useState<number | null>(null);
   const [resultTonnes, setResultTonnes] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -150,10 +152,10 @@ export default function Prediction() {
         </div>
         <div>
           <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent">
-            Yield Prediction
+            {t('prediction.title')}
           </h1>
           <p className="text-muted-foreground mt-0.5">
-            Run our Extra Trees ML model to predict future crop yields.
+            {t('prediction.subtitle')}
           </p>
         </div>
       </motion.div>
@@ -166,8 +168,8 @@ export default function Prediction() {
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-green-400 to-teal-500" />
             
             <CardHeader className="pb-4 pt-6">
-              <CardTitle className="text-xl">Prediction Parameters</CardTitle>
-              <CardDescription>Enter the environmental features for your farm.</CardDescription>
+              <CardTitle className="text-xl">{t('prediction.params')}</CardTitle>
+              <CardDescription>{t('prediction.paramsDesc')}</CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -182,7 +184,7 @@ export default function Prediction() {
                         <FormItem>
                           <FormLabel className="flex items-center gap-2 text-sm font-medium">
                             <MapPin className="h-3.5 w-3.5 text-emerald-400" />
-                            Target Farm
+                            {t('prediction.targetFarm')}
                             <span className="text-xs text-muted-foreground font-normal">(Optional)</span>
                           </FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -213,7 +215,7 @@ export default function Prediction() {
                         <FormItem>
                           <FormLabel className="flex items-center gap-2 text-sm font-medium">
                             <Calendar className="h-3.5 w-3.5 text-blue-400" />
-                            Target Year
+                            {t('prediction.targetYear')}
                           </FormLabel>
                           <FormControl>
                             <Input type="number" {...field} className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl hover:border-blue-500/30 transition-colors" />
@@ -231,7 +233,7 @@ export default function Prediction() {
                         <FormItem>
                           <FormLabel className="flex items-center gap-2 text-sm font-medium">
                             <MapPin className="h-3.5 w-3.5 text-purple-400" />
-                            Region / Country
+                            {t('prediction.region')}
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="e.g. India" {...field} className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl hover:border-purple-500/30 transition-colors" />
@@ -249,7 +251,7 @@ export default function Prediction() {
                         <FormItem>
                           <FormLabel className="flex items-center gap-2 text-sm font-medium">
                             <Wheat className="h-3.5 w-3.5 text-amber-400" />
-                            Crop Type
+                            {t('prediction.cropType')}
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="e.g. Wheat" {...field} className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl hover:border-amber-500/30 transition-colors" />
@@ -266,8 +268,8 @@ export default function Prediction() {
                       render={({ field }: any) => (
                         <FormItem>
                           <FormLabel className="flex items-center gap-2 text-sm font-medium">
-                            <Droplets className="h-3.5 w-3.5 text-sky-400" />
-                            Avg Rainfall (mm/yr)
+                            <Droplets className="h-3.5 w-3.5 text-cyan-400" />
+                            {t('prediction.rainfall')}
                           </FormLabel>
                           <FormControl>
                             <Input type="number" {...field} className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl hover:border-sky-500/30 transition-colors" />
@@ -285,7 +287,7 @@ export default function Prediction() {
                         <FormItem>
                           <FormLabel className="flex items-center gap-2 text-sm font-medium">
                             <Thermometer className="h-3.5 w-3.5 text-orange-400" />
-                            Avg Temperature (°C)
+                            {t('prediction.temperature')}
                           </FormLabel>
                           <FormControl>
                             <Input type="number" step="0.1" {...field} className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl hover:border-orange-500/30 transition-colors" />
@@ -302,8 +304,8 @@ export default function Prediction() {
                       render={({ field }: any) => (
                         <FormItem className="md:col-span-2">
                           <FormLabel className="flex items-center gap-2 text-sm font-medium">
-                            <Bug className="h-3.5 w-3.5 text-red-400" />
-                            Pesticides (Tonnes)
+                            <Bug className="h-3.5 w-3.5 text-rose-400" />
+                            {t('prediction.pesticides')}
                           </FormLabel>
                           <FormControl>
                             <Input type="number" {...field} className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl hover:border-red-500/30 transition-colors" />
@@ -320,15 +322,9 @@ export default function Prediction() {
                     disabled={predictMutation.isPending}
                   >
                     {predictMutation.isPending ? (
-                      <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Analyzing...
-                      </>
+                      <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Predicting...</>
                     ) : (
-                      <>
-                        <TrendingUp className="mr-2 h-5 w-5" />
-                        Run Machine Learning Model
-                      </>
+                      <><TrendingUp className="mr-2 h-5 w-5" /> {t('prediction.predictYield')}</>
                     )}
                   </Button>
                 </form>
@@ -343,7 +339,7 @@ export default function Prediction() {
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500" />
             
             <CardHeader className="text-center pb-2 pt-6">
-              <CardTitle className="text-xl">Prediction Result</CardTitle>
+              <CardTitle className="text-xl">{t('prediction.result')}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center h-[calc(100%-80px)] p-6">
               <AnimatePresence mode="wait">
@@ -417,9 +413,8 @@ export default function Prediction() {
                     <div className="mt-6 text-left border border-emerald-500/30 bg-emerald-500/5 rounded-xl p-5 relative overflow-hidden">
                       <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
                       <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2 text-emerald-400 font-semibold">
-                          <Bot className="h-5 w-5" />
-                          AI Explanation
+                        <div className="flex items-center gap-2 mb-2 text-emerald-400 font-medium">
+                          <Bot className="h-4 w-4" /> {t('prediction.aiAnalysis')}
                         </div>
                         <Button 
                           size="sm" 

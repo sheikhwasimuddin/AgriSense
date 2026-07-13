@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "@/components/theme-provider";
 import {
   Sheet,
@@ -32,18 +33,19 @@ import {
 } from "lucide-react";
 
 const mobileNav = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
-  { name: "My Farms", href: "/farms", icon: Tractor },
-  { name: "Yield Prediction", href: "/prediction", icon: Activity },
-  { name: "Disease Detection", href: "/disease", icon: Bug },
-  { name: "IoT Sensors", href: "/sensors", icon: Droplets },
-  { name: "Analytics", href: "/analytics", icon: LineChart },
-  { name: "Profile", href: "/profile", icon: UserIcon },
-  { name: "Settings", href: "/settings", icon: Settings },
+  { nameKey: "nav.dashboard", href: "/", icon: LayoutDashboard },
+  { nameKey: "nav.myFarms", href: "/farms", icon: Tractor },
+  { nameKey: "nav.yieldPrediction", href: "/prediction", icon: Activity },
+  { nameKey: "nav.diseaseDetection", href: "/disease", icon: Bug },
+  { nameKey: "nav.iotSensors", href: "/sensors", icon: Droplets },
+  { nameKey: "nav.analytics", href: "/analytics", icon: LineChart },
+  { nameKey: "nav.profile", href: "/profile", icon: UserIcon },
+  { nameKey: "nav.settings", href: "/settings", icon: Settings },
 ];
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -77,11 +79,11 @@ export default function Navbar() {
               </div>
               <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
                 <p className="px-3 pt-1 pb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-500">
-                  Navigation
+                  {t('nav.mainMenu')}
                 </p>
                 {mobileNav.map((item) => (
                   <NavLink
-                    key={item.name}
+                    key={item.href}
                     to={item.href}
                     end={item.href === "/"}
                     onClick={() => setMobileOpen(false)}
@@ -97,7 +99,7 @@ export default function Navbar() {
                     <div className="flex items-center justify-center h-7 w-7 rounded-md text-inherit">
                       <item.icon className="h-4 w-4" />
                     </div>
-                    {item.name}
+                    {t(item.nameKey)}
                   </NavLink>
                 ))}
               </nav>
@@ -112,7 +114,7 @@ export default function Navbar() {
                   <div className="flex items-center justify-center h-7 w-7 rounded-md">
                     <LogOut className="h-4 w-4" />
                   </div>
-                  Logout
+                  {t('nav.logout')}
                 </button>
               </div>
             </div>
@@ -125,7 +127,7 @@ export default function Navbar() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500 group-focus-within:text-slate-300 transition-colors" />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder={t('nav.search')}
               className="w-full h-8 bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.1] dark:border-white/[0.06] rounded-lg pl-9 pr-12 text-[13px] text-slate-300 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/20 focus:bg-black/[0.06] dark:focus:bg-white/[0.06] transition-all"
             />
             <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:inline-flex items-center gap-0.5 text-[10px] text-slate-500 font-medium bg-black/[0.06] dark:bg-white/[0.06] border border-black/[0.1] dark:border-white/[0.06] rounded px-1.5 py-0.5">
