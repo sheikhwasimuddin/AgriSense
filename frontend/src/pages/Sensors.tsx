@@ -8,8 +8,10 @@ import { ThermometerSun, Droplets, FlaskConical, CloudRain, Sun, Activity, Wifi 
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useTranslation } from "react-i18next";
 
 export default function Sensors() {
+  const { t } = useTranslation();
   const [selectedFarmId, setSelectedFarmId] = useState<string>("");
 
   const { data: farms, isLoading: farmsLoading } = useQuery({
@@ -49,16 +51,16 @@ export default function Sensors() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center">
-            IoT Sensors
+            {t('sensors.title')}
             <div className="ml-3 flex items-center px-2 py-1 bg-green-500/10 text-green-600 rounded-full text-xs font-medium border border-green-500/20">
               <span className="relative flex h-2 w-2 mr-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              Live Sync
+              {t('sensors.liveSync')}
             </div>
           </h1>
-          <p className="text-muted-foreground mt-1">Real-time telemetry from your field sensors.</p>
+          <p className="text-muted-foreground mt-1">{t('sensors.subtitle')}</p>
         </div>
 
         <div className="w-full sm:w-64">
@@ -80,8 +82,8 @@ export default function Sensors() {
       {!activeFarmId ? (
         <div className="text-center py-12 glass rounded-xl">
           <Wifi className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-xl font-medium text-foreground">No Farm Selected</h3>
-          <p className="text-muted-foreground">Select a farm from the dropdown or add one first.</p>
+          <h3 className="text-xl font-medium text-foreground">{t('sensors.noFarm')}</h3>
+          <p className="text-muted-foreground">{t('sensors.noFarmDesc')}</p>
         </div>
       ) : (
         <>
@@ -90,7 +92,7 @@ export default function Sensors() {
               <Card className="glass border-orange-500/20">
                 <CardContent className="p-6 flex flex-col items-center justify-center text-center">
                   <ThermometerSun className="h-8 w-8 text-orange-500 mb-2" />
-                  <span className="text-sm text-muted-foreground">Temperature</span>
+                  <span className="text-sm text-muted-foreground">{t('sensors.temperature')}</span>
                   <span className="text-3xl font-bold mt-1">
                     {latestLoading ? <Skeleton className="h-8 w-16" /> : `${latest?.temperature.toFixed(1)}°`}
                   </span>
@@ -102,7 +104,7 @@ export default function Sensors() {
               <Card className="glass border-blue-500/20">
                 <CardContent className="p-6 flex flex-col items-center justify-center text-center">
                   <Droplets className="h-8 w-8 text-blue-500 mb-2" />
-                  <span className="text-sm text-muted-foreground">Humidity</span>
+                  <span className="text-sm text-muted-foreground">{t('sensors.humidity')}</span>
                   <span className="text-3xl font-bold mt-1">
                     {latestLoading ? <Skeleton className="h-8 w-16" /> : `${latest?.humidity.toFixed(1)}%`}
                   </span>
@@ -114,7 +116,7 @@ export default function Sensors() {
               <Card className="glass border-amber-600/20">
                 <CardContent className="p-6 flex flex-col items-center justify-center text-center">
                   <Activity className="h-8 w-8 text-amber-600 mb-2" />
-                  <span className="text-sm text-muted-foreground">Soil Moisture</span>
+                  <span className="text-sm text-muted-foreground">{t('sensors.soilMoisture')}</span>
                   <span className="text-3xl font-bold mt-1">
                     {latestLoading ? <Skeleton className="h-8 w-16" /> : `${latest?.soil_moisture.toFixed(1)}%`}
                   </span>
@@ -127,7 +129,7 @@ export default function Sensors() {
               <Card className="glass border-purple-500/20">
                 <CardContent className="p-6 flex flex-col items-center justify-center text-center opacity-70">
                   <FlaskConical className="h-8 w-8 text-purple-500 mb-2" />
-                  <span className="text-sm text-muted-foreground">Soil pH</span>
+                  <span className="text-sm text-muted-foreground">{t('sensors.soilPh')}</span>
                   <span className="text-3xl font-bold mt-1">6.8</span>
                 </CardContent>
               </Card>
@@ -137,7 +139,7 @@ export default function Sensors() {
               <Card className="glass border-cyan-500/20">
                 <CardContent className="p-6 flex flex-col items-center justify-center text-center opacity-70">
                   <CloudRain className="h-8 w-8 text-cyan-500 mb-2" />
-                  <span className="text-sm text-muted-foreground">Rainfall</span>
+                  <span className="text-sm text-muted-foreground">{t('sensors.rainfall')}</span>
                   <span className="text-3xl font-bold mt-1">12<span className="text-lg">mm</span></span>
                 </CardContent>
               </Card>
@@ -147,7 +149,7 @@ export default function Sensors() {
               <Card className="glass border-yellow-500/20">
                 <CardContent className="p-6 flex flex-col items-center justify-center text-center opacity-70">
                   <Sun className="h-8 w-8 text-yellow-500 mb-2" />
-                  <span className="text-sm text-muted-foreground">Light (LUX)</span>
+                  <span className="text-sm text-muted-foreground">{t('sensors.light')}</span>
                   <span className="text-3xl font-bold mt-1">45k</span>
                 </CardContent>
               </Card>
@@ -157,7 +159,7 @@ export default function Sensors() {
           {/* Live Charts */}
           <Card className="glass mt-8">
             <CardHeader>
-              <CardTitle>Real-Time Telemetry Graph</CardTitle>
+              <CardTitle>{t('sensors.graphTitle')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-[400px] w-full">

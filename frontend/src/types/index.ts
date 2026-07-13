@@ -5,6 +5,9 @@ export interface User {
   role: string;
   is_active: boolean;
   phone?: string;
+  city?: string;
+  age?: number;
+  food_stock?: number;
 }
 
 export interface AuthResponse {

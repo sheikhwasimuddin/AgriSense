@@ -8,8 +8,10 @@ import { Tractor, MapPin, Plus, Trash2, Loader2, Wheat, Ruler, Sprout } from "lu
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 export default function Farms() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
@@ -84,15 +86,15 @@ export default function Farms() {
             <Tractor className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight gradient-text">My Farms</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">Manage your agricultural locations and fields.</p>
+            <h1 className="text-3xl font-bold tracking-tight gradient-text">{t('farms.title')}</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">{t('farms.subtitle')}</p>
           </div>
         </div>
 
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <button className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:from-emerald-500 hover:to-teal-500 transition-all duration-300">
-              <Plus className="h-4 w-4" /> Add Farm
+              <Plus className="h-4 w-4" /> {t('farms.addFarm')}
             </button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[460px] glass border-black/[0.1] dark:border-white/[0.08]">
@@ -101,13 +103,13 @@ export default function Farms() {
                 <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
                   <Sprout className="h-4.5 w-4.5 text-white" />
                 </div>
-                Add New Farm
+                {t('farms.addNewFarm')}
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4 mt-4">
               <div className="space-y-2">
                 <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                  <Tractor className="h-3 w-3 text-amber-400" /> Farm Name
+                  <Tractor className="h-3 w-3 text-amber-400" /> {t('farms.farmName')}
                 </Label>
                 <Input
                   required
@@ -119,7 +121,7 @@ export default function Farms() {
               </div>
               <div className="space-y-2">
                 <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                  <MapPin className="h-3 w-3 text-blue-400" /> Location
+                  <MapPin className="h-3 w-3 text-blue-400" /> {t('farms.location')}
                 </Label>
                 <Input
                   required
@@ -132,7 +134,7 @@ export default function Farms() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                    <MapPin className="h-3 w-3 text-rose-400" /> Latitude
+                    <MapPin className="h-3 w-3 text-rose-400" /> {t('farms.latitude')}
                   </Label>
                   <Input
                     required
@@ -146,7 +148,7 @@ export default function Farms() {
                 </div>
                 <div className="space-y-2">
                   <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                    <MapPin className="h-3 w-3 text-cyan-400" /> Longitude
+                    <MapPin className="h-3 w-3 text-cyan-400" /> {t('farms.longitude')}
                   </Label>
                   <Input
                     required
@@ -161,7 +163,7 @@ export default function Farms() {
               </div>
               <div className="space-y-2">
                 <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                  <Ruler className="h-3 w-3 text-purple-400" /> Total Area (Hectares)
+                  <Ruler className="h-3 w-3 text-purple-400" /> {t('farms.area')}
                 </Label>
                 <Input
                   required
@@ -175,7 +177,7 @@ export default function Farms() {
               </div>
               <div className="space-y-2">
                 <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                  <Wheat className="h-3 w-3 text-emerald-400" /> Primary Crop
+                  <Wheat className="h-3 w-3 text-emerald-400" /> {t('farms.crop')}
                 </Label>
                 <Input
                   required
@@ -191,7 +193,7 @@ export default function Farms() {
                 disabled={createMutation.isPending}
               >
                 {createMutation.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-                Save Farm
+                {t('farms.saveFarm')}
               </button>
             </form>
           </DialogContent>
@@ -210,9 +212,9 @@ export default function Farms() {
           <div className="h-24 w-24 rounded-full bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center mb-6 animate-float">
             <Tractor className="h-10 w-10 text-amber-400" />
           </div>
-          <h3 className="text-xl font-semibold text-foreground">No farms added yet</h3>
+          <h3 className="text-xl font-semibold text-foreground">{t('farms.noFarms')}</h3>
           <p className="text-muted-foreground mt-2 text-sm max-w-sm text-center">
-            Click the "Add Farm" button above to create your first farm and start monitoring crops.
+            {t('farms.noFarmsDesc')}
           </p>
         </motion.div>
       ) : (

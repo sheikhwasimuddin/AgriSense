@@ -49,6 +49,11 @@ env/
 *.csv
 *.zip
 
+# But DO track these JSON files
+!frontend/src/locales/*.json
+!frontend/package.json
+!frontend/tsconfig*.json
+
 # OS Files
 .DS_Store
 Thumbs.db

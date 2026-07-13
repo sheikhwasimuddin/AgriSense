@@ -12,13 +12,14 @@ import {
   Phone, 
   MapPin, 
   Calendar, 
-  Package, 
   Save,
-  Check
+  Check,
+  Package
 } from "lucide-react";
+import { authService } from "@/services/auth";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
   
@@ -26,24 +27,41 @@ export default function Profile() {
   const [formData, setFormData] = useState({
     name: user?.full_name || "John Doe",
     email: user?.email || "john.doe@example.com",
-    phone: user?.phone || "+1 (555) 012-3456",
-    city: "San Francisco",
-    age: "32",
-    foodStock: "450", // kg
+    phone: user?.phone || "",
+    city: user?.city || "",
+    age: user?.age ? user.age.toString() : "",
+    foodStock: user?.food_stock ? user.food_stock.toString() : "",
   });
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSaving(false);
+    try {
+      const updateData = {
+        full_name: formData.name,
+        phone: formData.phone,
+        city: formData.city,
+        age: formData.age ? parseInt(formData.age, 10) : undefined,
+        food_stock: formData.foodStock ? parseFloat(formData.foodStock) : undefined,
+      };
+      
+      const updatedUser = await authService.updateProfile(updateData);
+      updateUser(updatedUser);
+      
       toast({
         title: "Profile Saved",
         description: "Your personal information has been updated successfully.",
       });
-    }, 1000);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response?.data?.detail || "Failed to update profile.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const containerVariants = {

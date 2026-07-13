@@ -16,7 +16,17 @@ class UserBase(BaseModel):
     email: EmailStr
     full_name: str
     phone: Optional[str] = None
+    city: Optional[str] = None
+    age: Optional[int] = None
+    food_stock: Optional[float] = None
     role: str = "Farmer"
+
+class UserUpdate(BaseModel):
+    full_name: Optional[str] = None
+    phone: Optional[str] = None
+    city: Optional[str] = None
+    age: Optional[int] = None
+    food_stock: Optional[float] = None
 
 class UserCreate(UserBase):
     password: str

@@ -128,3 +128,77 @@
 2026-07-12 22:36:46.762 | INFO     | ml.predictor:load_models:23 - ML models loaded successfully.
 2026-07-12 22:41:27.160 | ERROR    | core.database:get_db:27 - Database session error: 401: Could not validate credentials
 2026-07-12 22:41:27.165 | ERROR    | core.database:get_db:27 - Database session error: 401: Could not validate credentials
+2026-07-12 23:00:30.727 | INFO     | main:lifespan:14 - Starting up AgriSense AI Backend...
+2026-07-12 23:00:30.727 | INFO     | ml.predictor:load_models:13 - Loading ML models into memory...
+2026-07-12 23:00:32.498 | INFO     | ml.predictor:load_models:23 - ML models loaded successfully.
+2026-07-12 23:35:23.631 | ERROR    | core.database:get_db:27 - Database session error: 401: Could not validate credentials
+2026-07-12 23:35:23.632 | ERROR    | core.database:get_db:27 - Database session error: 401: Could not validate credentials
+2026-07-12 23:35:23.633 | ERROR    | core.database:get_db:27 - Database session error: 401: Could not validate credentials
+2026-07-13 01:05:52.728 | ERROR    | core.database:get_db:27 - Database session error: 401: Could not validate credentials
+2026-07-13 01:05:52.731 | ERROR    | core.database:get_db:27 - Database session error: 401: Could not validate credentials
+2026-07-13 01:06:03.073 | ERROR    | core.database:get_db:27 - Database session error: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.ConnectionDoesNotExistError'>: connection was closed in the middle of operation
+[SQL: SELECT users.id, users.full_name, users.email, users.phone, users.role, users.hashed_password, users.created_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('test@agrisense.com',)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+2026-07-13 01:06:09.004 | INFO     | main:lifespan:18 - Shutting down AgriSense AI Backend...
+2026-07-13 01:06:13.019 | INFO     | main:lifespan:14 - Starting up AgriSense AI Backend...
+2026-07-13 01:06:13.019 | INFO     | ml.predictor:load_models:13 - Loading ML models into memory...
+2026-07-13 01:06:14.565 | INFO     | ml.predictor:load_models:23 - ML models loaded successfully.
+2026-07-13 01:10:25.298 | INFO     | main:lifespan:18 - Shutting down AgriSense AI Backend...
+2026-07-13 01:10:27.625 | INFO     | main:lifespan:14 - Starting up AgriSense AI Backend...
+2026-07-13 01:10:27.626 | INFO     | ml.predictor:load_models:13 - Loading ML models into memory...
+2026-07-13 01:10:28.646 | INFO     | ml.predictor:load_models:23 - ML models loaded successfully.
+2026-07-13 01:10:32.444 | INFO     | main:lifespan:18 - Shutting down AgriSense AI Backend...
+2026-07-13 01:10:34.546 | INFO     | main:lifespan:14 - Starting up AgriSense AI Backend...
+2026-07-13 01:10:34.546 | INFO     | ml.predictor:load_models:13 - Loading ML models into memory...
+2026-07-13 01:10:35.505 | INFO     | ml.predictor:load_models:23 - ML models loaded successfully.
+2026-07-13 01:10:41.161 | INFO     | main:lifespan:18 - Shutting down AgriSense AI Backend...
+2026-07-13 01:10:43.290 | INFO     | main:lifespan:14 - Starting up AgriSense AI Backend...
+2026-07-13 01:10:43.290 | INFO     | ml.predictor:load_models:13 - Loading ML models into memory...
+2026-07-13 01:10:44.246 | INFO     | ml.predictor:load_models:23 - ML models loaded successfully.
+2026-07-13 01:12:22.210 | ERROR    | core.database:get_db:27 - Database session error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.city does not exist
+[SQL: SELECT users.id, users.full_name, users.email, users.phone, users.city, users.age, users.food_stock, users.role, users.hashed_password, users.created_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('test@agrisense.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-07-13 01:12:22.211 | ERROR    | core.database:get_db:27 - Database session error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.city does not exist
+[SQL: SELECT users.id, users.full_name, users.email, users.phone, users.city, users.age, users.food_stock, users.role, users.hashed_password, users.created_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('test@agrisense.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-07-13 01:12:22.212 | ERROR    | core.database:get_db:27 - Database session error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.city does not exist
+[SQL: SELECT users.id, users.full_name, users.email, users.phone, users.city, users.age, users.food_stock, users.role, users.hashed_password, users.created_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('test@agrisense.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-07-13 01:12:23.795 | ERROR    | core.database:get_db:27 - Database session error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.city does not exist
+[SQL: SELECT users.id, users.full_name, users.email, users.phone, users.city, users.age, users.food_stock, users.role, users.hashed_password, users.created_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('test@agrisense.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-07-13 01:12:23.884 | ERROR    | core.database:get_db:27 - Database session error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.city does not exist
+[SQL: SELECT users.id, users.full_name, users.email, users.phone, users.city, users.age, users.food_stock, users.role, users.hashed_password, users.created_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('test@agrisense.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-07-13 01:12:23.885 | ERROR    | core.database:get_db:27 - Database session error: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.city does not exist
+[SQL: SELECT users.id, users.full_name, users.email, users.phone, users.city, users.age, users.food_stock, users.role, users.hashed_password, users.created_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('test@agrisense.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-07-13 01:12:26.736 | INFO     | main:lifespan:18 - Shutting down AgriSense AI Backend...
+2026-07-13 01:12:29.351 | INFO     | main:lifespan:14 - Starting up AgriSense AI Backend...
+2026-07-13 01:12:29.351 | INFO     | ml.predictor:load_models:13 - Loading ML models into memory...
+2026-07-13 01:12:30.797 | INFO     | ml.predictor:load_models:23 - ML models loaded successfully.
+2026-07-13 01:14:54.654 | INFO     | main:lifespan:18 - Shutting down AgriSense AI Backend...
+2026-07-13 01:14:58.730 | INFO     | main:lifespan:14 - Starting up AgriSense AI Backend...
+2026-07-13 01:14:58.730 | INFO     | ml.predictor:load_models:13 - Loading ML models into memory...
+2026-07-13 01:15:00.050 | INFO     | ml.predictor:load_models:23 - ML models loaded successfully.

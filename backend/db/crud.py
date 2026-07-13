@@ -20,6 +20,16 @@ async def create_user(db: AsyncSession, user: schemas.UserCreate, hashed_passwor
     await db.refresh(db_user)
     return db_user
 
+async def update_user(db: AsyncSession, db_user: models.User, user_update: schemas.UserUpdate):
+    update_data = user_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(db_user, key, value)
+    
+    db.add(db_user)
+    await db.commit()
+    await db.refresh(db_user)
+    return db_user
+
 async def get_farms(db: AsyncSession, user_id: UUID):
     result = await db.execute(select(models.Farm).filter(models.Farm.user_id == user_id))
     return result.scalars().all()

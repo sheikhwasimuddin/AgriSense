@@ -1,16 +1,32 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTheme } from "@/components/theme-provider";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { 
   Settings as SettingsIcon, 
   Bell, 
   Moon, 
   Sun,
-  Mail
+  Mail,
+  Globe
 } from "lucide-react";
 
+const LANGUAGES = [
+  { code: 'en', name: 'English' },
+  { code: 'hi', name: 'हिंदी (Hindi)' },
+  { code: 'bn', name: 'বাংলা (Bengali)' },
+  { code: 'or', name: 'ଓଡ଼ିଆ (Odia)' },
+  { code: 'ur', name: 'اردو (Urdu)' },
+  { code: 'fr', name: 'Français (French)' },
+  { code: 'es', name: 'Español (Spanish)' },
+  { code: 'ta', name: 'தமிழ் (Tamil)' },
+  { code: 'te', name: 'తెలుగు (Telugu)' }
+];
+
 export default function Settings() {
+  const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
   
   const [notifications, setNotifications] = useState({
@@ -44,9 +60,9 @@ export default function Settings() {
           </div>
           <div>
             <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
-              Settings & Preferences
+              {t('settings.title')}
             </h1>
-            <p className="text-muted-foreground mt-0.5">Customize your app appearance and notification alerts.</p>
+            <p className="text-muted-foreground mt-0.5">{t('settings.subtitle')}</p>
           </div>
         </div>
       </motion.div>
@@ -55,8 +71,8 @@ export default function Settings() {
         <Card className="glass border-black/10 dark:border-white/10 overflow-hidden relative max-w-3xl">
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500" />
           <CardHeader className="pb-4 pt-6">
-            <CardTitle className="text-xl">Appearance</CardTitle>
-            <CardDescription>Customize how AgriSense looks on your device.</CardDescription>
+            <CardTitle className="text-xl">{t('settings.appearance')}</CardTitle>
+            <CardDescription>{t('settings.appearanceDesc')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex items-center justify-between p-4 rounded-xl border border-black/5 dark:border-white/5 bg-background/50">
@@ -65,8 +81,8 @@ export default function Settings() {
                   {theme === 'dark' ? <Moon className="h-5 w-5 text-white" /> : <Sun className="h-5 w-5 text-yellow-400" />}
                 </div>
                 <div>
-                  <h4 className="font-medium">Theme Mode</h4>
-                  <p className="text-sm text-muted-foreground">Toggle between dark and light themes</p>
+                  <h4 className="font-medium">{t('settings.themeMode')}</h4>
+                  <p className="text-sm text-muted-foreground">{t('settings.themeDesc')}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 bg-black/5 dark:bg-white/5 p-1 rounded-lg">
@@ -74,14 +90,41 @@ export default function Settings() {
                   onClick={() => setTheme("light")}
                   className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${theme === 'light' ? 'bg-white dark:bg-black shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                 >
-                  Light
+                  {t('settings.light')}
                 </button>
                 <button
                   onClick={() => setTheme("dark")}
                   className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${theme === 'dark' ? 'bg-white dark:bg-black shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                 >
-                  Dark
+                  {t('settings.dark')}
                 </button>
+              </div>
+            </div>
+
+            {/* Language Selector */}
+            <div className="flex items-center justify-between p-4 rounded-xl border border-black/5 dark:border-white/5 bg-background/50">
+              <div className="flex items-center gap-4">
+                <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center shadow-lg shadow-cyan-500/20 text-white">
+                  <Globe className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="font-medium">{t('settings.language')}</h4>
+                  <p className="text-sm text-muted-foreground">{t('settings.languageDesc')}</p>
+                </div>
+              </div>
+              <div className="w-[180px]">
+                <Select value={i18n.language} onValueChange={(val) => i18n.changeLanguage(val)}>
+                  <SelectTrigger className="bg-black/5 dark:bg-white/5 border-none shadow-sm focus:ring-2 focus:ring-cyan-500/50">
+                    <SelectValue placeholder="Select Language" />
+                  </SelectTrigger>
+                  <SelectContent className="glass">
+                    {LANGUAGES.map((lang) => (
+                      <SelectItem key={lang.code} value={lang.code}>
+                        {lang.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </CardContent>
@@ -89,8 +132,8 @@ export default function Settings() {
 
         <Card className="glass border-black/10 dark:border-white/10 max-w-3xl">
           <CardHeader className="pb-4 pt-6">
-            <CardTitle className="text-xl">Notifications</CardTitle>
-            <CardDescription>Choose what updates you want to receive.</CardDescription>
+            <CardTitle className="text-xl">{t('settings.notifications')}</CardTitle>
+            <CardDescription>{t('settings.notificationsDesc')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between p-4 rounded-xl border border-black/5 dark:border-white/5 bg-background/50">
@@ -99,8 +142,8 @@ export default function Settings() {
                   <Bell className="h-5 w-5 text-emerald-500" />
                 </div>
                 <div>
-                  <h4 className="font-medium">Push Notifications</h4>
-                  <p className="text-sm text-muted-foreground">Receive real-time alerts about your crops</p>
+                  <h4 className="font-medium">{t('settings.pushNotif')}</h4>
+                  <p className="text-sm text-muted-foreground">{t('settings.pushNotifDesc')}</p>
                 </div>
               </div>
               <button 
@@ -117,8 +160,8 @@ export default function Settings() {
                   <Mail className="h-5 w-5 text-blue-500" />
                 </div>
                 <div>
-                  <h4 className="font-medium">Weekly Reports</h4>
-                  <p className="text-sm text-muted-foreground">Get an email summary of your farm's performance</p>
+                  <h4 className="font-medium">{t('settings.weeklyReports')}</h4>
+                  <p className="text-sm text-muted-foreground">{t('settings.weeklyReportsDesc')}</p>
                 </div>
               </div>
               <button 
