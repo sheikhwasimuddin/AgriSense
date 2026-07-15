@@ -82,13 +82,32 @@ export default function Farms() {
     setIsOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    let finalLat = parseFloat(formData.latitude) || 0;
+    let finalLng = parseFloat(formData.longitude) || 0;
+
+    // Synchronously geocode to ensure we don't save stale coordinates if the user clicked submit immediately
+    setIsGeocoding(true);
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(formData.location)}`);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        finalLat = parseFloat(data[0].lat);
+        finalLng = parseFloat(data[0].lon);
+      }
+    } catch (error) {
+      console.error("Geocoding error on submit", error);
+    } finally {
+      setIsGeocoding(false);
+    }
+
     const payload = {
       farm_name: formData.farm_name,
       location: formData.location,
-      latitude: parseFloat(formData.latitude) || 0,
-      longitude: parseFloat(formData.longitude) || 0,
+      latitude: finalLat,
+      longitude: finalLng,
       area: parseFloat(formData.area),
       crop: formData.crop,
     };
