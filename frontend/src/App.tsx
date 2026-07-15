@@ -19,6 +19,9 @@ import Sensors from "./pages/Sensors";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
+import Weather from "./pages/Weather";
+import FarmMap from "./pages/FarmMap";
+import CropCalendar from "./pages/CropCalendar";
 
 // Query Client setup
 const queryClient = new QueryClient({
@@ -80,6 +83,9 @@ function App() {
                 <Route path="disease" element={<Disease />} />
                 <Route path="sensors" element={<Sensors />} />
                 <Route path="analytics" element={<Analytics />} />
+                <Route path="weather" element={<Weather />} />
+                <Route path="map" element={<FarmMap />} />
+                <Route path="calendar" element={<CropCalendar />} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
