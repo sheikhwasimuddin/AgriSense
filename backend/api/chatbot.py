@@ -1,4 +1,5 @@
 import httpx
+import os
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from core.security import get_current_active_user
@@ -6,8 +7,8 @@ from db import models
 
 router = APIRouter()
 
-GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"  # placeholder
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "YOUR_OPENROUTER_API_KEY")
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 SYSTEM_PROMPT = """You are AgriBot, an expert AI agricultural advisor built into the AgriSense farming platform. You help farmers with:
 - Crop selection and rotation strategies
@@ -34,22 +35,27 @@ async def ask_chatbot(
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
             resp = await client.post(
-                GEMINI_URL,
+                OPENROUTER_URL,
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "HTTP-Referer": "http://localhost:5173",
+                    "X-Title": "AgriSense AI",
+                    "Content-Type": "application/json"
+                },
                 json={
-                    "contents": [{
-                        "parts": [
-                            {"text": SYSTEM_PROMPT},
-                            {"text": req.message}
-                        ]
-                    }]
+                    "model": "openai/gpt-4o",
+                    "messages": [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": req.message}
+                    ]
                 }
             )
             
             if resp.status_code == 200:
                 data = resp.json()
-                reply = data["candidates"][0]["content"]["parts"][0]["text"]
+                reply = data["choices"][0]["message"]["content"]
                 return ChatResponse(reply=reply)
             else:
                 return ChatResponse(reply="I'm having trouble connecting right now. Please try again in a moment.")
-    except Exception:
+    except Exception as e:
         return ChatResponse(reply="Sorry, I encountered an error. Please try again later.")
