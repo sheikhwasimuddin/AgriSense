@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { farmsService } from "@/services/farms";
 import { Card } from "@/components/ui/card";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { motion } from "framer-motion";
 import { Map } from "lucide-react";
 import L from "leaflet";
@@ -18,6 +18,12 @@ const defaultIcon = L.icon({
   shadowSize: [41, 41]
 });
 L.Marker.prototype.options.icon = defaultIcon;
+
+function RecenterMap({ lat, lng }: { lat: number; lng: number }) {
+  const map = useMap();
+  map.setView([lat, lng]);
+  return null;
+}
 
 export default function FarmMap() {
   const { data: farms, isLoading } = useQuery({
@@ -45,8 +51,7 @@ export default function FarmMap() {
         </div>
       </div>
 
-      <Card className="glass border-black/10 dark:border-white/10 overflow-hidden relative">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 z-[1000]" />
+      <Card className="neo-box overflow-hidden relative">
         <div className="h-[600px] w-full rounded-b-xl overflow-hidden">
           {isLoading ? (
             <div className="h-full flex items-center justify-center">
@@ -63,6 +68,7 @@ export default function FarmMap() {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
+              <RecenterMap lat={center[0]} lng={center[1]} />
               {farms?.map((farm) => (
                 <Marker key={farm.id} position={[farm.latitude, farm.longitude]}>
                   <Popup>

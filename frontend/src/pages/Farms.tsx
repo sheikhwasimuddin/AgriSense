@@ -15,6 +15,7 @@ export default function Farms() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
+  const [isGeocoding, setIsGeocoding] = useState(false);
   const [editFarmId, setEditFarmId] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     farm_name: "",
@@ -98,6 +99,29 @@ export default function Farms() {
     }
   };
 
+  const handleLocationBlur = async () => {
+    if (!formData.location) return;
+    setIsGeocoding(true);
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(formData.location)}`);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          latitude: data[0].lat,
+          longitude: data[0].lon,
+        }));
+        toast({ title: "Location Found", description: "Coordinates updated automatically." });
+      } else {
+        toast({ variant: "destructive", title: "Location Not Found", description: "Could not find coordinates for this location." });
+      }
+    } catch (error) {
+      console.error("Geocoding error", error);
+    } finally {
+      setIsGeocoding(false);
+    }
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
@@ -162,13 +186,21 @@ export default function Farms() {
                 <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
                   <MapPin className="h-3 w-3 text-blue-400" /> {t('farms.location')}
                 </Label>
-                <Input
-                  required
-                  value={formData.location}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, location: e.target.value })}
-                  placeholder="Punjab, India"
-                  className="h-11 rounded-xl bg-black/[0.04] dark:bg-white/[0.04] border-black/[0.1] dark:border-white/[0.08] focus:border-emerald-500/50"
-                />
+                <div className="relative">
+                  <Input
+                    required
+                    value={formData.location}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, location: e.target.value })}
+                    onBlur={handleLocationBlur}
+                    placeholder="Punjab, India"
+                    className="h-11 rounded-xl bg-black/[0.04] dark:bg-white/[0.04] border-black/[0.1] dark:border-white/[0.08] focus:border-emerald-500/50 pr-10"
+                  />
+                  {isGeocoding && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <Loader2 className="h-4 w-4 animate-spin text-emerald-500" />
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
