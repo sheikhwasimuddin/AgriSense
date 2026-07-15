@@ -114,3 +114,51 @@ async def get_disease_predictions(db: AsyncSession, farm_id: int):
         .limit(20)
     )
     return result.scalars().all()
+
+async def get_crop_tasks(db: AsyncSession, user_id: UUID):
+    result = await db.execute(
+        select(models.CropTask)
+        .filter(models.CropTask.user_id == user_id)
+        .order_by(models.CropTask.due_date.asc().nullslast())
+    )
+    return result.scalars().all()
+
+async def create_crop_task(db: AsyncSession, task: schemas.CropTaskCreate, user_id: UUID):
+    db_task = models.CropTask(**task.model_dump(), user_id=user_id)
+    db.add(db_task)
+    await db.commit()
+    await db.refresh(db_task)
+    return db_task
+
+async def update_crop_task(db: AsyncSession, task_id: int, task_update: schemas.CropTaskUpdate):
+    result = await db.execute(select(models.CropTask).filter(models.CropTask.id == task_id))
+    db_task = result.scalars().first()
+    if not db_task:
+        return None
+    update_data = task_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(db_task, key, value)
+    db.add(db_task)
+    await db.commit()
+    await db.refresh(db_task)
+    return db_task
+
+async def delete_crop_task(db: AsyncSession, task_id: int):
+    result = await db.execute(select(models.CropTask).filter(models.CropTask.id == task_id))
+    db_task = result.scalars().first()
+    if db_task:
+        await db.delete(db_task)
+        await db.commit()
+        return True
+    return False
+
+async def toggle_crop_task(db: AsyncSession, task_id: int):
+    result = await db.execute(select(models.CropTask).filter(models.CropTask.id == task_id))
+    db_task = result.scalars().first()
+    if db_task:
+        db_task.completed = not db_task.completed
+        db.add(db_task)
+        await db.commit()
+        await db.refresh(db_task)
+        return db_task
+    return None

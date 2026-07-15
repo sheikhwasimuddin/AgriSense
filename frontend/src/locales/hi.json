@@ -10,7 +10,10 @@
     "settings": "सेटिंग्स",
     "logout": "लॉग आउट",
     "mainMenu": "मुख्य मेनू",
-    "search": "खोजें..."
+    "search": "खोजें...",
+    "weather": "Weather Radar",
+    "farmMap": "Satellite Map",
+    "cropCalendar": "Task Scheduler"
   },
   "dashboard": {
     "welcome": "वापसी पर स्वागत है",
@@ -18,7 +21,14 @@
     "totalYield": "कुल उपज",
     "activeAlerts": "सक्रिय अलर्ट",
     "healthyCrops": "स्वस्थ फसलें",
-    "weatherStatus": "मौसम की स्थिति"
+    "weatherStatus": "मौसम की स्थिति",
+    "details": {
+      "farm_name": "Farm Name",
+      "location": "Location",
+      "area": "Area",
+      "primary_crop": "Primary Crop",
+      "added": "Added"
+    }
   },
   "settings": {
     "title": "सेटिंग्स और प्राथमिकताएं",

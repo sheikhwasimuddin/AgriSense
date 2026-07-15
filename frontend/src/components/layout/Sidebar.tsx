@@ -14,6 +14,9 @@ import {
   Sprout,
   Zap,
   Bug,
+  CloudSun,
+  Map,
+  CalendarDays,
 } from "lucide-react";
 
 const mainNav = [
@@ -23,6 +26,9 @@ const mainNav = [
   { nameKey: "nav.diseaseDetection", href: "/disease", icon: Bug },
   { nameKey: "nav.iotSensors", href: "/sensors", icon: Droplets },
   { nameKey: "nav.analytics", href: "/analytics", icon: LineChart },
+  { nameKey: "nav.weather", href: "/weather", icon: CloudSun },
+  { nameKey: "nav.farmMap", href: "/map", icon: Map },
+  { nameKey: "nav.cropCalendar", href: "/calendar", icon: CalendarDays },
 ];
 
 const bottomNav = [

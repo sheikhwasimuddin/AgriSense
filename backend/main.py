@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
 from core.logger import logger
 from ml.predictor import predictor_service
-from api import auth, farms, prediction, sensors, analytics, disease
+from api import auth, farms, prediction, sensors, analytics, disease, weather, chatbot, tasks
 
 # Define lifecycle events
 @asynccontextmanager
@@ -40,6 +40,9 @@ app.include_router(prediction.router, prefix="/api/v1/predict", tags=["Predictio
 app.include_router(disease.router, prefix="/api/v1/disease", tags=["Disease Prediction"])
 app.include_router(sensors.router, prefix="/api/v1/sensors", tags=["Sensors"])
 app.include_router(analytics.router, prefix="/api/v1/analytics", tags=["Analytics"])
+app.include_router(weather.router, prefix="/api/v1/weather", tags=["Weather"])
+app.include_router(chatbot.router, prefix="/api/v1/chatbot", tags=["Chatbot"])
+app.include_router(tasks.router, prefix="/api/v1/tasks", tags=["Tasks"])
 
 @app.get("/health")
 async def health_check():

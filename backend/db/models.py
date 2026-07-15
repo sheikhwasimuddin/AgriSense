@@ -80,3 +80,16 @@ class DiseasePrediction(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     farm = relationship("Farm", back_populates="disease_predictions")
+
+class CropTask(Base):
+    __tablename__ = "crop_tasks"
+    
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
+    farm_id = Column(Integer, ForeignKey("farms.id"), nullable=True)
+    title = Column(String, nullable=False)
+    description = Column(String)
+    task_type = Column(String, default="general")  # planting, watering, harvesting, fertilizing, general
+    due_date = Column(DateTime(timezone=True))
+    completed = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

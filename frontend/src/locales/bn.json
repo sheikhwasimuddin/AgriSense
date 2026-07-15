@@ -10,7 +10,10 @@
     "settings": "সেটিংস",
     "logout": "লগআউট",
     "mainMenu": "প্রধান মেনু",
-    "search": "অনুসন্ধান..."
+    "search": "অনুসন্ধান...",
+    "weather": "Weather Radar",
+    "farmMap": "Satellite Map",
+    "cropCalendar": "Task Scheduler"
   },
   "dashboard": {
     "welcome": "ফিরে আসার জন্য স্বাগতম",
@@ -18,7 +21,14 @@
     "totalYield": "মোট ফলন",
     "activeAlerts": "সক্রিয় সতর্কতা",
     "healthyCrops": "সুস্থ ফসল",
-    "weatherStatus": "আবহাওয়ার অবস্থা"
+    "weatherStatus": "আবহাওয়ার অবস্থা",
+    "details": {
+      "farm_name": "Farm Name",
+      "location": "Location",
+      "area": "Area",
+      "primary_crop": "Primary Crop",
+      "added": "Added"
+    }
   },
   "settings": {
     "title": "সেটিংস এবং পছন্দসমূহ",

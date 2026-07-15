@@ -10,7 +10,10 @@
     "settings": "அமைப்புகள்",
     "logout": "வெளியேறு",
     "mainMenu": "முதன்மை மெனு",
-    "search": "தேடு..."
+    "search": "தேடு...",
+    "weather": "Weather Radar",
+    "farmMap": "Satellite Map",
+    "cropCalendar": "Task Scheduler"
   },
   "dashboard": {
     "welcome": "மீண்டும் வருக",
@@ -18,7 +21,14 @@
     "totalYield": "மொத்த மகசூல்",
     "activeAlerts": "செயலில் உள்ள விழிப்பூட்டல்கள்",
     "healthyCrops": "ஆரோக்கியமான பயிர்கள்",
-    "weatherStatus": "வானிலை நிலை"
+    "weatherStatus": "வானிலை நிலை",
+    "details": {
+      "farm_name": "Farm Name",
+      "location": "Location",
+      "area": "Area",
+      "primary_crop": "Primary Crop",
+      "added": "Added"
+    }
   },
   "settings": {
     "title": "அமைப்புகள் மற்றும் விருப்பங்கள்",

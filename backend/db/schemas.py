@@ -118,3 +118,29 @@ class DiseasePredictionResponse(BaseModel):
     created_at: Optional[datetime] = None
 
     model_config = {"from_attributes": True}
+
+# Crop Task Schemas
+class CropTaskBase(BaseModel):
+    title: str
+    description: Optional[str] = None
+    task_type: str = "general"
+    due_date: Optional[datetime] = None
+    farm_id: Optional[int] = None
+
+class CropTaskCreate(CropTaskBase):
+    pass
+
+class CropTaskUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    task_type: Optional[str] = None
+    due_date: Optional[datetime] = None
+    completed: Optional[bool] = None
+
+class CropTask(CropTaskBase):
+    id: int
+    user_id: UUID
+    completed: bool = False
+    created_at: datetime
+    
+    model_config = {"from_attributes": True}

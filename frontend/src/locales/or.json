@@ -10,7 +10,10 @@
     "settings": "ସେଟିଂସ",
     "logout": "ଲଗଆଉଟ୍",
     "mainMenu": "ମୁଖ୍ୟ ମେନୁ",
-    "search": "ସନ୍ଧାନ କରନ୍ତୁ..."
+    "search": "ସନ୍ଧାନ କରନ୍ତୁ...",
+    "weather": "Weather Radar",
+    "farmMap": "Satellite Map",
+    "cropCalendar": "Task Scheduler"
   },
   "dashboard": {
     "welcome": "ପୁନର୍ବାର ସ୍ଵାଗତ",
@@ -18,7 +21,14 @@
     "totalYield": "ମୋଟ ଅମଳ",
     "activeAlerts": "ସକ୍ରିୟ ଆଲର୍ଟ",
     "healthyCrops": "ସୁସ୍ଥ ଫସଲ",
-    "weatherStatus": "ପାଣିପାଗ ସ୍ଥିତି"
+    "weatherStatus": "ପାଣିପାଗ ସ୍ଥିତି",
+    "details": {
+      "farm_name": "Farm Name",
+      "location": "Location",
+      "area": "Area",
+      "primary_crop": "Primary Crop",
+      "added": "Added"
+    }
   },
   "settings": {
     "title": "ସେଟିଂସ ଏବଂ ପସନ୍ଦ",
