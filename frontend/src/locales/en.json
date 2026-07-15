@@ -1,11 +1,14 @@
 {
   "nav": {
-    "dashboard": "Dashboard",
-    "myFarms": "My Farms",
-    "yieldPrediction": "Yield Prediction",
-    "diseaseDetection": "Disease Detection",
-    "iotSensors": "IoT Sensors",
-    "analytics": "Analytics",
+    "dashboard": "Command Center",
+    "myFarms": "Farm Network",
+    "yieldPrediction": "Yield Oracle",
+    "diseaseDetection": "Bio-Scanner",
+    "iotSensors": "Sensor Grid",
+    "analytics": "Data Nexus",
+    "weather": "Weather Radar",
+    "farmMap": "Satellite Map",
+    "cropCalendar": "Task Scheduler",
     "profile": "Profile",
     "settings": "Settings",
     "logout": "Logout",
@@ -18,7 +21,14 @@
     "totalYield": "Total Yield",
     "activeAlerts": "Active Alerts",
     "healthyCrops": "Healthy Crops",
-    "weatherStatus": "Weather Status"
+    "weatherStatus": "Weather Status",
+    "details": {
+      "farm_name": "Farm Name",
+      "location": "Location",
+      "area": "Area",
+      "primary_crop": "Primary Crop",
+      "added": "Added"
+    }
   },
   "settings": {
     "title": "Settings & Preferences",

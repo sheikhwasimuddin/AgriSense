@@ -10,7 +10,10 @@
     "settings": "ترتیبات",
     "logout": "لاگ آؤٹ",
     "mainMenu": "مین مینو",
-    "search": "تلاش کریں..."
+    "search": "تلاش کریں...",
+    "weather": "Weather Radar",
+    "farmMap": "Satellite Map",
+    "cropCalendar": "Task Scheduler"
   },
   "dashboard": {
     "welcome": "خوش آمدید",
@@ -18,7 +21,14 @@
     "totalYield": "کل پیداوار",
     "activeAlerts": "فعال الرٹس",
     "healthyCrops": "صحت مند فصلیں",
-    "weatherStatus": "موسم کی صورتحال"
+    "weatherStatus": "موسم کی صورتحال",
+    "details": {
+      "farm_name": "Farm Name",
+      "location": "Location",
+      "area": "Area",
+      "primary_crop": "Primary Crop",
+      "added": "Added"
+    }
   },
   "settings": {
     "title": "ترتیبات اور ترجیحات",

@@ -10,7 +10,10 @@
     "settings": "Paramètres",
     "logout": "Déconnexion",
     "mainMenu": "Menu Principal",
-    "search": "Recherche..."
+    "search": "Recherche...",
+    "weather": "Weather Radar",
+    "farmMap": "Satellite Map",
+    "cropCalendar": "Task Scheduler"
   },
   "dashboard": {
     "welcome": "Content de vous revoir",
@@ -18,7 +21,14 @@
     "totalYield": "Rendement Total",
     "activeAlerts": "Alertes Actives",
     "healthyCrops": "Cultures Saines",
-    "weatherStatus": "État de la Météo"
+    "weatherStatus": "État de la Météo",
+    "details": {
+      "farm_name": "Farm Name",
+      "location": "Location",
+      "area": "Area",
+      "primary_crop": "Primary Crop",
+      "added": "Added"
+    }
   },
   "settings": {
     "title": "Paramètres et Préférences",
