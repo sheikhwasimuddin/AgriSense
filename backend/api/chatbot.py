@@ -1,13 +1,13 @@
 import httpx
-import os
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from core.security import get_current_active_user
+from core.config import settings
 from db import models
 
 router = APIRouter()
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "YOUR_OPENROUTER_API_KEY")
+OPENROUTER_API_KEY = settings.OPENROUTER_API_KEY
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 SYSTEM_PROMPT = """You are AgriBot, an expert AI agricultural advisor built into the AgriSense farming platform. You help farmers with:
@@ -44,6 +44,7 @@ async def ask_chatbot(
                 },
                 json={
                     "model": "openai/gpt-4o",
+                    "max_tokens": 1000,
                     "messages": [
                         {"role": "system", "content": SYSTEM_PROMPT},
                         {"role": "user", "content": req.message}
