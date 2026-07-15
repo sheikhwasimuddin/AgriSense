@@ -34,6 +34,18 @@ async def read_farm(
         raise HTTPException(status_code=404, detail="Farm not found")
     return farm
 
+@router.put("/{farm_id}", response_model=schemas.Farm)
+async def update_farm_endpoint(
+    farm_id: int,
+    farm_update: schemas.FarmUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user)
+):
+    farm = await crud.get_farm(db=db, farm_id=farm_id)
+    if farm is None or farm.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Farm not found")
+    return await crud.update_farm(db=db, farm_id=farm_id, farm_update=farm_update)
+
 @router.delete("/{farm_id}")
 async def delete_farm_endpoint(
     farm_id: int,

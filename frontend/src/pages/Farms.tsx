@@ -15,6 +15,7 @@ export default function Farms() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
+  const [editFarmId, setEditFarmId] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     farm_name: "",
     location: "",
@@ -33,12 +34,23 @@ export default function Farms() {
     mutationFn: farmsService.createFarm,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["farms"] });
-      setIsOpen(false);
-      setFormData({ farm_name: "", location: "", latitude: "", longitude: "", area: "", crop: "" });
+      closeDialog();
       toast({ title: "Success", description: "Farm added successfully." });
     },
     onError: () => {
       toast({ variant: "destructive", title: "Error", description: "Failed to add farm." });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: Parameters<typeof farmsService.updateFarm>[1] }) => farmsService.updateFarm(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["farms"] });
+      closeDialog();
+      toast({ title: "Success", description: "Farm updated successfully." });
+    },
+    onError: () => {
+      toast({ variant: "destructive", title: "Error", description: "Failed to update farm." });
     },
   });
 
@@ -50,16 +62,40 @@ export default function Farms() {
     },
   });
 
+  const closeDialog = () => {
+    setIsOpen(false);
+    setEditFarmId(null);
+    setFormData({ farm_name: "", location: "", latitude: "", longitude: "", area: "", crop: "" });
+  };
+
+  const handleEdit = (farm: any) => {
+    setFormData({
+      farm_name: farm.farm_name,
+      location: farm.location,
+      latitude: String(farm.latitude),
+      longitude: String(farm.longitude),
+      area: String(farm.area),
+      crop: farm.crop,
+    });
+    setEditFarmId(farm.id);
+    setIsOpen(true);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createMutation.mutate({
+    const payload = {
       farm_name: formData.farm_name,
       location: formData.location,
       latitude: parseFloat(formData.latitude) || 0,
       longitude: parseFloat(formData.longitude) || 0,
       area: parseFloat(formData.area),
       crop: formData.crop,
-    });
+    };
+    if (editFarmId) {
+      updateMutation.mutate({ id: editFarmId, data: payload });
+    } else {
+      createMutation.mutate(payload);
+    }
   };
 
   const containerVariants = {
@@ -91,19 +127,22 @@ export default function Farms() {
           </div>
         </div>
 
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog open={isOpen} onOpenChange={(open) => {
+          if (!open) closeDialog();
+          else setIsOpen(true);
+        }}>
           <DialogTrigger asChild>
-            <button className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:from-emerald-500 hover:to-teal-500 transition-all duration-300">
+            <button className="neo-button inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-emerald-500">
               <Plus className="h-4 w-4" /> {t('farms.addFarm')}
             </button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[460px] glass border-black/[0.1] dark:border-white/[0.08]">
+          <DialogContent className="sm:max-w-[460px] neo-box border-none">
             <DialogHeader>
               <DialogTitle className="text-xl font-bold flex items-center gap-3">
                 <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
                   <Sprout className="h-4.5 w-4.5 text-white" />
                 </div>
-                {t('farms.addNewFarm')}
+                {editFarmId ? "Edit Farm" : t('farms.addNewFarm')}
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4 mt-4">
@@ -189,11 +228,11 @@ export default function Farms() {
               </div>
               <button 
                 type="submit" 
-                className="w-full mt-6 h-11 text-sm font-semibold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
-                disabled={createMutation.isPending}
+                className="w-full mt-6 h-11 text-sm font-semibold neo-button text-emerald-500 flex items-center justify-center gap-2 disabled:opacity-50"
+                disabled={createMutation.isPending || updateMutation.isPending}
               >
-                {createMutation.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-                {t('farms.saveFarm')}
+                {(createMutation.isPending || updateMutation.isPending) && <Loader2 className="h-4 w-4 animate-spin" />}
+                {editFarmId ? "Update Farm" : t('farms.saveFarm')}
               </button>
             </form>
           </DialogContent>
@@ -208,7 +247,7 @@ export default function Farms() {
           ))}
         </div>
       ) : farms?.length === 0 ? (
-        <motion.div variants={itemVariants} className="flex flex-col items-center justify-center py-20 glass rounded-2xl border-dashed border-black/[0.1] dark:border-white/[0.08]">
+        <motion.div variants={itemVariants} className="flex flex-col items-center justify-center py-20 neo-inset rounded-2xl">
           <div className="h-24 w-24 rounded-full bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center mb-6 animate-float">
             <Tractor className="h-10 w-10 text-amber-400" />
           </div>
@@ -261,13 +300,19 @@ export default function Farms() {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="pt-3 border-t border-black/[0.1] dark:border-white/[0.04]">
+                <CardFooter className="pt-3 flex gap-2 justify-between">
                   <button
-                    className="w-full flex items-center justify-center gap-2 py-2 text-xs font-medium rounded-lg text-rose-400/80 hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-200"
+                    className="flex-1 flex items-center justify-center gap-2 py-2 text-xs font-medium neo-button text-blue-500"
+                    onClick={() => handleEdit(farm)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="flex-1 flex items-center justify-center gap-2 py-2 text-xs font-medium neo-button text-rose-500"
                     onClick={() => deleteMutation.mutate(farm.id)}
                     disabled={deleteMutation.isPending}
                   >
-                    <Trash2 className="h-3.5 w-3.5" /> Delete Farm
+                    <Trash2 className="h-3.5 w-3.5" /> Delete
                   </button>
                 </CardFooter>
               </Card>

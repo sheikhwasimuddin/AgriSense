@@ -4,10 +4,20 @@ import { farmsService } from "@/services/farms";
 import { sensorsService } from "@/services/sensors";
 import { analyticsService } from "@/services/analytics";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Gauge } from "@/components/ui/gauge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import {
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+  Tooltip as RechartsTooltip
+} from "recharts";
 import {
   LayoutDashboard,
   ThermometerSun,
@@ -168,9 +178,8 @@ export default function Dashboard() {
       iconColor: "text-blue-400",
     },
     {
-      label: "Light Intensity",
       value: sensors?.light_intensity,
-      unit: " lx",
+      unit: "lx",
       avg: null,
       icon: Sun,
       gradient: "from-yellow-400 to-amber-300",
@@ -180,6 +189,20 @@ export default function Dashboard() {
       iconColor: "text-yellow-400",
     },
   ];
+
+  // Provide min and max for gauges based on stat type
+  const getGaugeProps = (label: string) => {
+    switch(label) {
+      case "Temperature": return { min: -10, max: 50 };
+      case "Humidity": return { min: 0, max: 100 };
+      case "Soil Moisture": return { min: 0, max: 100 };
+      case "Latest Yield": return { min: 0, max: 10 };
+      case "Soil pH": return { min: 0, max: 14 };
+      case "Rainfall": return { min: 0, max: 300 };
+      case "Light Intensity": return { min: 0, max: 100000 };
+      default: return { min: 0, max: 100 };
+    }
+  };
 
   const systemStatuses = [
     {
@@ -232,6 +255,15 @@ export default function Dashboard() {
         },
       ]
     : [];
+
+  const radarData = sensors ? [
+    { subject: 'Temp', A: sensors.temperature, fullMark: 50 },
+    { subject: 'Humidity', A: sensors.humidity, fullMark: 100 },
+    { subject: 'Soil M.', A: sensors.soil_moisture, fullMark: 100 },
+    { subject: 'pH', A: (sensors.soil_ph / 14) * 100, fullMark: 100 },
+    { subject: 'Rainfall', A: Math.min(100, sensors.rainfall), fullMark: 100 },
+    { subject: 'Light', A: Math.min(100, sensors.light_intensity / 1000), fullMark: 100 },
+  ] : [];
 
   // --- Empty State ---
   if (!farmsLoading && !activeFarm) {
@@ -343,7 +375,7 @@ export default function Dashboard() {
               variants={statCardVariants}
               initial="hidden"
               animate="visible"
-              className="group glass overflow-hidden relative rounded-2xl border border-black/[0.1] dark:border-white/[0.06] hover:border-white/[0.1] transition-all duration-500"
+              className="group neo-box overflow-hidden relative flex flex-col transition-all duration-500"
             >
               {/* Gradient accent line */}
               <div
@@ -370,16 +402,26 @@ export default function Dashboard() {
                 </p>
 
                 {isLoading ? (
-                  <Skeleton className="h-9 w-24 bg-black/[0.06] dark:bg-white/[0.06] rounded-lg" />
+                  <Skeleton className="h-24 w-24 rounded-full neo-inset mx-auto" />
                 ) : (
-                  <>
-                    <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                      {stat.value != null
-                        ? `${typeof stat.value === "number" ? stat.value.toFixed(1) : stat.value}${stat.unit}`
-                        : "—"}
-                    </p>
+                  <div className="flex flex-col items-center justify-center pt-2">
+                    {stat.value != null ? (
+                      <Gauge
+                        value={typeof stat.value === "number" ? stat.value : parseFloat(stat.value)}
+                        unit={stat.unit.trim()}
+                        min={getGaugeProps(stat.label).min}
+                        max={getGaugeProps(stat.label).max}
+                        colorClass={stat.iconColor}
+                        size={100}
+                        strokeWidth={8}
+                      />
+                    ) : (
+                      <div className="h-[100px] w-[100px] flex items-center justify-center neo-inset rounded-full">
+                        <span className="text-2xl font-black text-muted-foreground">—</span>
+                      </div>
+                    )}
                     {stat.avg != null && (
-                      <p className="text-xs text-slate-900/30 dark:text-white/30 mt-1.5">
+                      <p className="text-xs text-slate-900/40 dark:text-white/40 mt-3 font-medium">
                         Avg:{" "}
                         {typeof stat.avg === "number"
                           ? stat.avg.toFixed(1)
@@ -387,12 +429,7 @@ export default function Dashboard() {
                         {stat.unit}
                       </p>
                     )}
-                    {stat.label === "Latest Yield" && (
-                      <p className="text-xs text-slate-900/30 dark:text-white/30 mt-1.5">
-                        Predicted yield
-                      </p>
-                    )}
-                  </>
+                  </div>
                 )}
               </div>
             </motion.div>
@@ -405,7 +442,7 @@ export default function Dashboard() {
         {/* Farm Details */}
         <motion.div
           variants={itemVariants}
-          className="glass rounded-2xl overflow-hidden border border-black/[0.1] dark:border-white/[0.06]"
+          className="neo-box overflow-hidden"
         >
           <div className="h-0.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-300" />
           <div className="p-6">
@@ -454,7 +491,7 @@ export default function Dashboard() {
         {/* System Status */}
         <motion.div
           variants={itemVariants}
-          className="glass rounded-2xl overflow-hidden border border-black/[0.1] dark:border-white/[0.06]"
+          className="neo-box overflow-hidden"
         >
           <div className="h-0.5 w-full bg-gradient-to-r from-cyan-500 via-blue-400 to-cyan-300" />
           <div className="p-6">
@@ -501,6 +538,30 @@ export default function Dashboard() {
           </div>
         </motion.div>
       </div>
+      
+      {/* Radar Chart */}
+      {activeFarm && radarData.length > 0 && (
+        <motion.div variants={itemVariants} className="neo-box overflow-hidden">
+          <div className="h-0.5 w-full bg-gradient-to-r from-purple-500 via-pink-400 to-rose-300" />
+          <div className="p-6">
+            <h3 className="text-sm font-semibold text-slate-900/60 dark:text-white/60 uppercase tracking-wider mb-5 flex items-center gap-2">
+              <Activity className="h-4 w-4 text-purple-400/70" />
+              Sensor Health Profile
+            </h3>
+            <div className="h-[350px] w-full p-4 neo-inset rounded-2xl flex justify-center items-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
+                  <PolarGrid stroke="#333" opacity={0.2} />
+                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#888888', fontSize: 12 }} />
+                  <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                  <Radar name="Sensor" dataKey="A" stroke="#10b981" fill="#10b981" fillOpacity={0.4} />
+                  <RechartsTooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: '8px', border: 'none', color: '#fff' }} />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 }

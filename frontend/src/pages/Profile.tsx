@@ -101,8 +101,7 @@ export default function Profile() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Profile Settings */}
             <div className="lg:col-span-2 space-y-6">
-              <Card className="glass border-black/10 dark:border-white/10 overflow-hidden relative">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500" />
+              <Card className="neo-box overflow-hidden relative">
                 <CardHeader className="pb-4 pt-6">
                   <CardTitle className="text-xl">General Information</CardTitle>
                   <CardDescription>Update your contact and demographic details.</CardDescription>
@@ -117,7 +116,7 @@ export default function Profile() {
                       <Input 
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl focus:border-indigo-500/50" 
+                        className="neo-inset h-11 rounded-xl focus:border-indigo-500/50" 
                       />
                     </div>
                     {/* Email */}
@@ -129,7 +128,7 @@ export default function Profile() {
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl focus:border-indigo-500/50" 
+                        className="neo-inset h-11 rounded-xl focus:border-indigo-500/50" 
                       />
                     </div>
                     {/* Phone */}
@@ -140,7 +139,7 @@ export default function Profile() {
                       <Input 
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl focus:border-indigo-500/50" 
+                        className="neo-inset h-11 rounded-xl focus:border-indigo-500/50" 
                       />
                     </div>
                     {/* City */}
@@ -151,7 +150,7 @@ export default function Profile() {
                       <Input 
                         value={formData.city}
                         onChange={(e) => setFormData({...formData, city: e.target.value})}
-                        className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl focus:border-indigo-500/50" 
+                        className="neo-inset h-11 rounded-xl focus:border-indigo-500/50" 
                       />
                     </div>
                     {/* Age */}
@@ -163,14 +162,14 @@ export default function Profile() {
                         type="number"
                         value={formData.age}
                         onChange={(e) => setFormData({...formData, age: e.target.value})}
-                        className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl focus:border-indigo-500/50" 
+                        className="neo-inset h-11 rounded-xl focus:border-indigo-500/50" 
                       />
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="glass border-black/10 dark:border-white/10 overflow-hidden relative">
+              <Card className="neo-box overflow-hidden relative">
                 <CardHeader className="pb-4 pt-6">
                   <CardTitle className="text-xl">Farm Inventory</CardTitle>
                   <CardDescription>Manage your current storage and food stock.</CardDescription>
@@ -184,7 +183,7 @@ export default function Profile() {
                       type="number"
                       value={formData.foodStock}
                       onChange={(e) => setFormData({...formData, foodStock: e.target.value})}
-                      className="bg-background/50 border-black/10 dark:border-white/10 h-11 rounded-xl focus:border-indigo-500/50 text-lg font-semibold text-indigo-400" 
+                      className="neo-inset h-11 rounded-xl focus:border-indigo-500/50 text-lg font-semibold text-indigo-400" 
                     />
                   </div>
                 </CardContent>
@@ -193,13 +192,13 @@ export default function Profile() {
 
             {/* Sidebar Save Panel */}
             <div className="space-y-6">
-              <Card className="glass border-black/10 dark:border-white/10 sticky top-6">
+              <Card className="neo-box sticky top-6">
                 <CardHeader>
                   <CardTitle className="text-lg">Review & Save</CardTitle>
                   <CardDescription>Make sure all your information is correct before saving.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+                  <div className="p-4 rounded-xl neo-box-sm">
                     <h4 className="text-sm font-semibold text-indigo-400 flex items-center gap-2 mb-1">
                       <Check className="h-4 w-4" /> Profile Completeness
                     </h4>
@@ -210,7 +209,7 @@ export default function Profile() {
                   <Button 
                     type="submit" 
                     disabled={isSaving}
-                    className="w-full h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-lg shadow-indigo-500/20 transition-all duration-300 border-0"
+                    className="w-full h-12 text-base font-semibold neo-button text-indigo-500 transition-all duration-300 border-0"
                   >
                     {isSaving ? (
                       <div className="flex items-center gap-2">

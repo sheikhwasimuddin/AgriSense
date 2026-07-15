@@ -53,6 +53,14 @@ class FarmBase(BaseModel):
 class FarmCreate(FarmBase):
     pass
 
+class FarmUpdate(BaseModel):
+    farm_name: Optional[str] = None
+    location: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    area: Optional[float] = None
+    crop: Optional[str] = None
+
 class Farm(FarmBase):
     id: int
     user_id: UUID

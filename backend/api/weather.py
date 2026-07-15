@@ -1,14 +1,14 @@
 import httpx
-import os
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database import get_db
 from core.security import get_current_active_user
+from core.config import settings
 from db import crud, models
 
 router = APIRouter()
 
-OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY", "YOUR_OPENWEATHER_API_KEY")
+OPENWEATHER_API_KEY = settings.OPENWEATHER_API_KEY
 BASE_URL = "https://api.openweathermap.org/data/2.5"
 
 @router.get("/{farm_id}")

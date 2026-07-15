@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Gauge } from "@/components/ui/gauge";
 import { Loader2, TrendingUp, Sprout, Droplets, Thermometer, Bug, MapPin, Calendar, Wheat, Volume2, Square, Bot } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -163,9 +164,7 @@ export default function Prediction() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         {/* Form Panel - 3 columns */}
         <motion.div variants={itemVariants} className="lg:col-span-3">
-          <Card className="glass shadow-lg border-black/10 dark:border-white/10 overflow-hidden relative">
-            {/* Subtle gradient accent line at top */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-green-400 to-teal-500" />
+          <Card className="neo-box overflow-hidden relative">
             
             <CardHeader className="pb-4 pt-6">
               <CardTitle className="text-xl">{t('prediction.params')}</CardTitle>
@@ -318,7 +317,7 @@ export default function Prediction() {
 
                   <Button 
                     type="submit" 
-                    className="w-full h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all duration-300 border-0" 
+                    className="w-full h-12 text-base font-semibold neo-button text-emerald-500 hover:text-emerald-400 transition-all duration-300 border-0" 
                     disabled={predictMutation.isPending}
                   >
                     {predictMutation.isPending ? (
@@ -335,7 +334,7 @@ export default function Prediction() {
 
         {/* Results Panel - 2 columns */}
         <motion.div variants={itemVariants} className="lg:col-span-2">
-          <Card className="glass h-full border-black/10 dark:border-white/10 overflow-hidden relative">
+          <Card className="neo-box h-full overflow-hidden relative">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500" />
             
             <CardHeader className="text-center pb-2 pt-6">
@@ -388,22 +387,27 @@ export default function Prediction() {
                     className="text-center w-full space-y-6"
                   >
                     {/* Main Result */}
-                    <div className="py-8 px-6 bg-gradient-to-br from-emerald-500/10 via-background/50 to-teal-500/10 rounded-2xl border border-emerald-500/20 shadow-inner">
-                      <span className="block text-sm text-muted-foreground mb-3 uppercase tracking-wider">Estimated Yield</span>
-                      <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400">
-                        {resultTonnes?.toFixed(2)}
-                      </span>
-                      <span className="block text-lg font-medium mt-2 text-muted-foreground">Tonnes / Hectare</span>
-                      <span className="block text-xs text-muted-foreground mt-2 opacity-60">({result.toFixed(2)} hg/ha)</span>
+                    <div className="py-6 px-6 neo-inset rounded-2xl flex flex-col items-center">
+                      <span className="block text-sm text-muted-foreground mb-4 uppercase tracking-wider">Estimated Yield</span>
+                      <Gauge
+                        value={resultTonnes || 0}
+                        unit="t/ha"
+                        min={0}
+                        max={10}
+                        colorClass="text-emerald-500"
+                        size={140}
+                        strokeWidth={10}
+                      />
+                      <span className="block text-xs text-muted-foreground mt-4 opacity-60">({result.toFixed(2)} hg/ha)</span>
                     </div>
                     
                     {/* Model Info */}
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="p-3 rounded-xl bg-background/50 border border-black/5 dark:border-white/5">
+                      <div className="p-3 rounded-xl neo-box-sm">
                         <span className="text-xs text-muted-foreground block">Model</span>
                         <span className="text-sm font-semibold text-foreground">Extra Trees</span>
                       </div>
-                      <div className="p-3 rounded-xl bg-background/50 border border-black/5 dark:border-white/5">
+                      <div className="p-3 rounded-xl neo-box-sm">
                         <span className="text-xs text-muted-foreground block">Accuracy</span>
                         <span className="text-sm font-semibold text-emerald-400">98.89% R²</span>
                       </div>
@@ -460,7 +464,7 @@ export default function Prediction() {
         {/* History Panel - Full width below */}
         {selectedFarmId && selectedFarmId !== "none" && yieldHistory && yieldHistory.length > 0 && (
           <motion.div variants={itemVariants} className="lg:col-span-5 mt-4">
-            <Card className="glass border-black/10 dark:border-white/10 overflow-hidden">
+            <Card className="neo-box overflow-hidden">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-emerald-500" />
@@ -471,7 +475,7 @@ export default function Prediction() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {yieldHistory.map((history) => (
-                    <div key={history.id} className="p-4 rounded-xl bg-background/50 border border-black/5 dark:border-white/5 space-y-3">
+                    <div key={history.id} className="p-4 rounded-xl neo-box-sm space-y-3">
                       <div className="flex justify-between items-start">
                         <span className="text-sm font-semibold text-foreground">{history.crop} ({history.year})</span>
                         <span className="text-xs text-muted-foreground">{new Date(history.created_at).toLocaleDateString()}</span>

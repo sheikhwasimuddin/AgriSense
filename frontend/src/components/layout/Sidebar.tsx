@@ -41,7 +41,7 @@ export default function Sidebar() {
   const { t } = useTranslation();
 
   return (
-    <aside className="w-[260px] hidden md:flex flex-col bg-white/40 dark:bg-black/40 backdrop-blur-2xl border-r border-black/[0.1] dark:border-white/[0.06] z-20">
+    <aside className="w-[260px] hidden md:flex flex-col neo-box rounded-none z-20">
       {/* Logo */}
       <div className="h-16 flex items-center gap-3 px-5 border-b border-black/[0.1] dark:border-white/[0.06]">
         <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-emerald-500/25">
@@ -69,8 +69,8 @@ export default function Sidebar() {
               cn(
                 "group flex items-center gap-3 px-3 py-2 text-[13px] font-medium rounded-lg transition-all duration-200",
                 isActive
-                  ? "bg-emerald-500/10 text-emerald-400 shadow-sm shadow-emerald-500/5"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.04]"
+                  ? "neo-inset text-emerald-500"
+                  : "text-slate-500 hover:text-emerald-400 neo-button hover:bg-transparent"
               )
             }
           >
@@ -80,8 +80,8 @@ export default function Sidebar() {
                   className={cn(
                     "flex items-center justify-center h-7 w-7 rounded-md transition-all",
                     isActive
-                      ? "bg-emerald-500/15 text-emerald-400"
-                      : "text-slate-500 group-hover:text-slate-300"
+                      ? "text-emerald-500"
+                      : "text-slate-500 group-hover:text-emerald-400"
                   )}
                 >
                   <item.icon className="h-[16px] w-[16px]" />
@@ -109,8 +109,8 @@ export default function Sidebar() {
               cn(
                 "group flex items-center gap-3 px-3 py-2 text-[13px] font-medium rounded-lg transition-all duration-200",
                 isActive
-                  ? "bg-emerald-500/10 text-emerald-400"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.04]"
+                  ? "neo-inset text-emerald-500"
+                  : "text-slate-500 hover:text-emerald-400 neo-button hover:bg-transparent"
               )
             }
           >
@@ -122,7 +122,7 @@ export default function Sidebar() {
         ))}
         <button
           onClick={logout}
-          className="w-full group flex items-center gap-3 px-3 py-2 text-[13px] font-medium rounded-lg text-rose-400/80 hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-200"
+          className="w-full group flex items-center gap-3 px-3 py-2 text-[13px] font-medium rounded-lg text-rose-500 neo-button hover:bg-transparent transition-all duration-200"
         >
           <div className="flex items-center justify-center h-7 w-7 rounded-md">
             <LogOut className="h-[16px] w-[16px]" />

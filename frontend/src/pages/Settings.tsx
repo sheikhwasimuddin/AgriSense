@@ -68,14 +68,13 @@ export default function Settings() {
       </motion.div>
 
       <motion.div variants={itemVariants} className="space-y-6">
-        <Card className="glass border-black/10 dark:border-white/10 overflow-hidden relative max-w-3xl">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500" />
+        <Card className="neo-box overflow-hidden relative max-w-3xl">
           <CardHeader className="pb-4 pt-6">
             <CardTitle className="text-xl">{t('settings.appearance')}</CardTitle>
             <CardDescription>{t('settings.appearanceDesc')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex items-center justify-between p-4 rounded-xl border border-black/5 dark:border-white/5 bg-background/50">
+            <div className="flex items-center justify-between p-4 rounded-xl neo-box-sm">
               <div className="flex items-center gap-4">
                 <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center border border-white/10">
                   {theme === 'dark' ? <Moon className="h-5 w-5 text-white" /> : <Sun className="h-5 w-5 text-yellow-400" />}
@@ -101,8 +100,7 @@ export default function Settings() {
               </div>
             </div>
 
-            {/* Language Selector */}
-            <div className="flex items-center justify-between p-4 rounded-xl border border-black/5 dark:border-white/5 bg-background/50">
+            <div className="flex items-center justify-between p-4 rounded-xl neo-box-sm">
               <div className="flex items-center gap-4">
                 <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center shadow-lg shadow-cyan-500/20 text-white">
                   <Globe className="h-5 w-5" />
@@ -117,7 +115,7 @@ export default function Settings() {
                   <SelectTrigger className="bg-black/5 dark:bg-white/5 border-none shadow-sm focus:ring-2 focus:ring-cyan-500/50">
                     <SelectValue placeholder="Select Language" />
                   </SelectTrigger>
-                  <SelectContent className="glass">
+                  <SelectContent className="neo-box border-none">
                     {LANGUAGES.map((lang) => (
                       <SelectItem key={lang.code} value={lang.code}>
                         {lang.name}
@@ -130,13 +128,13 @@ export default function Settings() {
           </CardContent>
         </Card>
 
-        <Card className="glass border-black/10 dark:border-white/10 max-w-3xl">
+        <Card className="neo-box max-w-3xl">
           <CardHeader className="pb-4 pt-6">
             <CardTitle className="text-xl">{t('settings.notifications')}</CardTitle>
             <CardDescription>{t('settings.notificationsDesc')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-4 rounded-xl border border-black/5 dark:border-white/5 bg-background/50">
+            <div className="flex items-center justify-between p-4 rounded-xl neo-box-sm">
               <div className="flex items-center gap-4">
                 <div className="h-10 w-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
                   <Bell className="h-5 w-5 text-emerald-500" />
@@ -154,7 +152,7 @@ export default function Settings() {
               </button>
             </div>
 
-            <div className="flex items-center justify-between p-4 rounded-xl border border-black/5 dark:border-white/5 bg-background/50">
+            <div className="flex items-center justify-between p-4 rounded-xl neo-box-sm">
               <div className="flex items-center gap-4">
                 <div className="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
                   <Mail className="h-5 w-5 text-blue-500" />

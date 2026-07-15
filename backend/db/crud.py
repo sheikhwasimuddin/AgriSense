@@ -45,6 +45,19 @@ async def create_farm(db: AsyncSession, farm: schemas.FarmCreate, user_id: UUID)
     await db.refresh(db_farm)
     return db_farm
 
+async def update_farm(db: AsyncSession, farm_id: int, farm_update: schemas.FarmUpdate):
+    db_farm = await get_farm(db, farm_id)
+    if not db_farm:
+        return None
+    update_data = farm_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(db_farm, key, value)
+    
+    db.add(db_farm)
+    await db.commit()
+    await db.refresh(db_farm)
+    return db_farm
+
 async def delete_farm(db: AsyncSession, farm_id: int):
     farm = await get_farm(db, farm_id)
     if farm:

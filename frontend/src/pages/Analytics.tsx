@@ -5,6 +5,7 @@ import { analyticsService } from "@/services/analytics";
 import { sensorsService } from "@/services/sensors";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Gauge } from "@/components/ui/gauge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
 import {
@@ -17,7 +18,10 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend
+  Legend,
+  PieChart,
+  Pie,
+  Cell
 } from "recharts";
 
 export default function Analytics() {
@@ -61,6 +65,14 @@ export default function Analytics() {
     { month: 'Jul', yield: 185, predicted: 190 },
   ];
 
+  const cropDistributionData = [
+    { name: 'Wheat', value: 400 },
+    { name: 'Corn', value: 300 },
+    { name: 'Rice', value: 300 },
+    { name: 'Barley', value: 200 },
+  ];
+  const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6'];
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -71,10 +83,10 @@ export default function Analytics() {
 
         <div className="w-full sm:w-64">
           <Select value={activeFarmId} onValueChange={setSelectedFarmId}>
-            <SelectTrigger className="bg-background glass">
+            <SelectTrigger className="bg-background neo-box border-none h-11">
               <SelectValue placeholder={farmsLoading ? "Loading..." : t('analytics.selectFarm')} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="neo-box border-none">
               {farms?.map((farm) => (
                 <SelectItem key={farm.id} value={farm.id.toString()}>
                   {farm.farm_name}
@@ -86,51 +98,96 @@ export default function Analytics() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="glass">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">{t('analytics.avgTemp')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold text-orange-500">
-              {summaryLoading ? <Skeleton className="h-10 w-24" /> : `${summary?.averages.temperature.toFixed(1)}°`}
-            </div>
-            <p className="text-sm text-muted-foreground mt-2">{t('analytics.over24h')}</p>
+        <Card className="neo-box border-none">
+          <CardContent className="p-6 flex flex-col items-center justify-center text-center">
+            {summaryLoading ? <Skeleton className="h-24 w-24 rounded-full neo-inset" /> : (
+              <Gauge
+                value={summary?.averages.temperature || 0}
+                unit="°C"
+                min={-10}
+                max={50}
+                label={t('analytics.avgTemp')}
+                colorClass="text-orange-500"
+                size={120}
+              />
+            )}
+            <p className="text-xs text-muted-foreground mt-4">{t('analytics.over24h')}</p>
           </CardContent>
         </Card>
         
-        <Card className="glass">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">{t('analytics.avgHum')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold text-blue-500">
-              {summaryLoading ? <Skeleton className="h-10 w-24" /> : `${summary?.averages.humidity.toFixed(1)}%`}
-            </div>
-            <p className="text-sm text-muted-foreground mt-2">{t('analytics.over24h')}</p>
+        <Card className="neo-box border-none">
+          <CardContent className="p-6 flex flex-col items-center justify-center text-center">
+            {summaryLoading ? <Skeleton className="h-24 w-24 rounded-full neo-inset" /> : (
+              <Gauge
+                value={summary?.averages.humidity || 0}
+                unit="%"
+                min={0}
+                max={100}
+                label={t('analytics.avgHum')}
+                colorClass="text-blue-500"
+                size={120}
+              />
+            )}
+            <p className="text-xs text-muted-foreground mt-4">{t('analytics.over24h')}</p>
           </CardContent>
         </Card>
 
-        <Card className="glass">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">{t('analytics.avgSoil')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-bold text-amber-600">
-              {summaryLoading ? <Skeleton className="h-10 w-24" /> : `${summary?.averages.soil_moisture.toFixed(1)}%`}
-            </div>
-            <p className="text-sm text-muted-foreground mt-2">{t('analytics.over24h')}</p>
+        <Card className="neo-box border-none">
+          <CardContent className="p-6 flex flex-col items-center justify-center text-center">
+            {summaryLoading ? <Skeleton className="h-24 w-24 rounded-full neo-inset" /> : (
+              <Gauge
+                value={summary?.averages.soil_moisture || 0}
+                unit="%"
+                min={0}
+                max={100}
+                label={t('analytics.avgSoil')}
+                colorClass="text-amber-500"
+                size={120}
+              />
+            )}
+            <p className="text-xs text-muted-foreground mt-4">{t('analytics.over24h')}</p>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card className="glass">
+        <Card className="neo-box border-none">
+          <CardHeader>
+            <CardTitle>Crop Distribution</CardTitle>
+            <CardDescription>Current land allocation by crop type</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[300px] w-full p-4 neo-inset rounded-2xl flex justify-center items-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={cropDistributionData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {cropDistributionData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: '8px', border: 'none', color: '#fff' }} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="neo-box border-none">
           <CardHeader>
             <CardTitle>{t('analytics.tempVsSoil')}</CardTitle>
             <CardDescription>{t('analytics.tempVsSoilDesc')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px] w-full">
+            <div className="h-[300px] w-full p-4 neo-inset rounded-2xl">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={areaData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                   <defs>
@@ -155,13 +212,13 @@ export default function Analytics() {
           </CardContent>
         </Card>
 
-        <Card className="glass">
+        <Card className="neo-box border-none">
           <CardHeader>
             <CardTitle>{t('analytics.historicalVsPredicted')}</CardTitle>
             <CardDescription>{t('analytics.historicalVsPredictedDesc')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px] w-full">
+            <div className="h-[300px] w-full p-4 neo-inset rounded-2xl">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={monthlyYieldData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#333" opacity={0.2} />

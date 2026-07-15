@@ -4,6 +4,7 @@ import { farmsService } from "@/services/farms";
 import { sensorsService } from "@/services/sensors";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Gauge } from "@/components/ui/gauge";
 import { ThermometerSun, Droplets, FlaskConical, CloudRain, Sun, Activity, Wifi } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
@@ -65,10 +66,10 @@ export default function Sensors() {
 
         <div className="w-full sm:w-64">
           <Select value={activeFarmId} onValueChange={setSelectedFarmId}>
-            <SelectTrigger className="bg-background glass">
+            <SelectTrigger className="bg-background neo-box border-none h-11">
               <SelectValue placeholder={farmsLoading ? "Loading..." : "Select Farm"} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="neo-box border-none">
               {farms?.map((farm) => (
                 <SelectItem key={farm.id} value={farm.id.toString()}>
                   {farm.farm_name}
@@ -80,7 +81,7 @@ export default function Sensors() {
       </div>
 
       {!activeFarmId ? (
-        <div className="text-center py-12 glass rounded-xl">
+        <div className="text-center py-12 neo-inset rounded-xl">
           <Wifi className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-xl font-medium text-foreground">{t('sensors.noFarm')}</h3>
           <p className="text-muted-foreground">{t('sensors.noFarmDesc')}</p>
@@ -89,80 +90,115 @@ export default function Sensors() {
         <>
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }}>
-              <Card className="glass border-orange-500/20">
-                <CardContent className="p-6 flex flex-col items-center justify-center text-center">
-                  <ThermometerSun className="h-8 w-8 text-orange-500 mb-2" />
-                  <span className="text-sm text-muted-foreground">{t('sensors.temperature')}</span>
-                  <span className="text-3xl font-bold mt-1">
-                    {latestLoading ? <Skeleton className="h-8 w-16" /> : `${latest?.temperature.toFixed(1)}°`}
-                  </span>
+              <Card className="neo-box border-none h-full">
+                <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
+                  {latestLoading ? <Skeleton className="h-24 w-24 rounded-full neo-inset" /> : (
+                    <Gauge
+                      value={latest?.temperature || 0}
+                      unit="°C"
+                      min={-10}
+                      max={50}
+                      label={t('sensors.temperature')}
+                      colorClass="text-orange-500"
+                      size={100}
+                    />
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
 
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2 }}>
-              <Card className="glass border-blue-500/20">
-                <CardContent className="p-6 flex flex-col items-center justify-center text-center">
-                  <Droplets className="h-8 w-8 text-blue-500 mb-2" />
-                  <span className="text-sm text-muted-foreground">{t('sensors.humidity')}</span>
-                  <span className="text-3xl font-bold mt-1">
-                    {latestLoading ? <Skeleton className="h-8 w-16" /> : `${latest?.humidity.toFixed(1)}%`}
-                  </span>
+              <Card className="neo-box border-none h-full">
+                <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
+                  {latestLoading ? <Skeleton className="h-24 w-24 rounded-full neo-inset" /> : (
+                    <Gauge
+                      value={latest?.humidity || 0}
+                      unit="%"
+                      min={0}
+                      max={100}
+                      label={t('sensors.humidity')}
+                      colorClass="text-blue-500"
+                      size={100}
+                    />
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
 
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.3 }}>
-              <Card className="glass border-amber-600/20">
-                <CardContent className="p-6 flex flex-col items-center justify-center text-center">
-                  <Activity className="h-8 w-8 text-amber-600 mb-2" />
-                  <span className="text-sm text-muted-foreground">{t('sensors.soilMoisture')}</span>
-                  <span className="text-3xl font-bold mt-1">
-                    {latestLoading ? <Skeleton className="h-8 w-16" /> : `${latest?.soil_moisture.toFixed(1)}%`}
-                  </span>
+              <Card className="neo-box border-none h-full">
+                <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
+                  {latestLoading ? <Skeleton className="h-24 w-24 rounded-full neo-inset" /> : (
+                    <Gauge
+                      value={latest?.soil_moisture || 0}
+                      unit="%"
+                      min={0}
+                      max={100}
+                      label={t('sensors.soilMoisture')}
+                      colorClass="text-amber-500"
+                      size={100}
+                    />
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
 
             {/* Mocked extra sensors for a premium look */}
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.4 }}>
-              <Card className="glass border-purple-500/20">
-                <CardContent className="p-6 flex flex-col items-center justify-center text-center opacity-70">
-                  <FlaskConical className="h-8 w-8 text-purple-500 mb-2" />
-                  <span className="text-sm text-muted-foreground">{t('sensors.soilPh')}</span>
-                  <span className="text-3xl font-bold mt-1">6.8</span>
+              <Card className="neo-box border-none h-full">
+                <CardContent className="p-6 flex flex-col items-center justify-center text-center opacity-70 h-full">
+                  <Gauge
+                      value={6.8}
+                      min={0}
+                      max={14}
+                      label={t('sensors.soilPh')}
+                      colorClass="text-purple-500"
+                      size={100}
+                    />
                 </CardContent>
               </Card>
             </motion.div>
 
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.5 }}>
-              <Card className="glass border-cyan-500/20">
-                <CardContent className="p-6 flex flex-col items-center justify-center text-center opacity-70">
-                  <CloudRain className="h-8 w-8 text-cyan-500 mb-2" />
-                  <span className="text-sm text-muted-foreground">{t('sensors.rainfall')}</span>
-                  <span className="text-3xl font-bold mt-1">12<span className="text-lg">mm</span></span>
+              <Card className="neo-box border-none h-full">
+                <CardContent className="p-6 flex flex-col items-center justify-center text-center opacity-70 h-full">
+                  <Gauge
+                      value={12}
+                      unit="mm"
+                      min={0}
+                      max={50}
+                      label={t('sensors.rainfall')}
+                      colorClass="text-cyan-500"
+                      size={100}
+                    />
                 </CardContent>
               </Card>
             </motion.div>
 
             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.6 }}>
-              <Card className="glass border-yellow-500/20">
-                <CardContent className="p-6 flex flex-col items-center justify-center text-center opacity-70">
-                  <Sun className="h-8 w-8 text-yellow-500 mb-2" />
-                  <span className="text-sm text-muted-foreground">{t('sensors.light')}</span>
-                  <span className="text-3xl font-bold mt-1">45k</span>
+              <Card className="neo-box border-none h-full">
+                <CardContent className="p-6 flex flex-col items-center justify-center text-center opacity-70 h-full">
+                  <Gauge
+                      value={45}
+                      unit="k lx"
+                      min={0}
+                      max={100}
+                      label={t('sensors.light')}
+                      colorClass="text-yellow-500"
+                      size={100}
+                    />
                 </CardContent>
               </Card>
             </motion.div>
           </div>
 
           {/* Live Charts */}
-          <Card className="glass mt-8">
+          <Card className="neo-box border-none mt-8">
             <CardHeader>
               <CardTitle>{t('sensors.graphTitle')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[400px] w-full">
+              <div className="h-[400px] w-full p-4 neo-inset rounded-2xl">
                 {historyLoading ? (
                   <Skeleton className="h-full w-full" />
                 ) : (

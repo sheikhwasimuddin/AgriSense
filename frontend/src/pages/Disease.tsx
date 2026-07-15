@@ -104,8 +104,7 @@ export default function Disease() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         {/* Form Panel - 3 columns */}
         <motion.div variants={itemVariants} className="lg:col-span-3">
-          <Card className="glass shadow-lg border-black/10 dark:border-white/10 overflow-hidden relative h-full">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rose-500 via-red-400 to-orange-500" />
+          <Card className="neo-box overflow-hidden relative h-full">
             
             <CardHeader className="pb-4 pt-6">
               <CardTitle className="text-xl">{t('disease.analysis')}</CardTitle>
@@ -153,7 +152,7 @@ export default function Disease() {
 
               <Button 
                 onClick={handlePredict}
-                className="w-full h-12 mt-4 text-base font-semibold rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 shadow-lg shadow-rose-500/20 hover:shadow-rose-500/40 transition-all duration-300 border-0" 
+                className="w-full h-12 mt-4 text-base font-semibold neo-button text-rose-500 transition-all duration-300 border-0" 
                 disabled={predictMutation.isPending}
               >
                 {predictMutation.isPending ? (
@@ -174,7 +173,7 @@ export default function Disease() {
 
         {/* Results Panel - 2 columns */}
         <motion.div variants={itemVariants} className="lg:col-span-2">
-          <Card className="glass h-full border-black/10 dark:border-white/10 overflow-hidden relative">
+          <Card className="neo-box h-full overflow-hidden relative">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500" />
             
             <CardHeader className="text-center pb-2 pt-6">
@@ -224,7 +223,7 @@ export default function Disease() {
                     transition={{ type: "spring", stiffness: 200, damping: 15 }}
                     className="text-center w-full space-y-6"
                   >
-                    <div className="py-8 px-6 bg-gradient-to-br from-rose-500/10 via-background/50 to-red-500/10 rounded-2xl border border-rose-500/20 shadow-inner">
+                    <div className="py-8 px-6 neo-inset rounded-2xl">
                       <span className="block text-sm text-muted-foreground mb-3 uppercase tracking-wider">Detected Condition</span>
                       <span className={`text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r ${result.disease === "Healthy" ? "from-emerald-400 to-teal-400" : "from-rose-400 to-orange-400"}`}>
                         {result.disease}
@@ -234,7 +233,7 @@ export default function Disease() {
                       </span>
                     </div>
                     
-                    <div className="p-4 rounded-xl bg-background/50 border border-black/5 dark:border-white/5 text-left">
+                    <div className="p-4 rounded-xl neo-box-sm text-left">
                       <span className="text-xs text-muted-foreground block mb-1">Recommendation</span>
                       <span className="text-sm font-medium text-foreground">{result.recommendation}</span>
                     </div>
@@ -265,7 +264,7 @@ export default function Disease() {
         {/* History Panel */}
         {selectedFarmId && selectedFarmId !== "none" && diseaseHistory && diseaseHistory.length > 0 && (
           <motion.div variants={itemVariants} className="lg:col-span-5 mt-4">
-            <Card className="glass border-black/10 dark:border-white/10 overflow-hidden">
+            <Card className="neo-box overflow-hidden">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl flex items-center gap-2">
                   <Sprout className="h-5 w-5 text-rose-500" />
@@ -276,7 +275,7 @@ export default function Disease() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {diseaseHistory.map((history) => (
-                    <div key={history.id} className="p-4 rounded-xl bg-background/50 border border-black/5 dark:border-white/5 space-y-3">
+                    <div key={history.id} className="p-4 rounded-xl neo-box-sm space-y-3">
                       <div className="flex justify-between items-start">
                         <span className={`text-sm font-bold ${history.disease === "Healthy" ? "text-emerald-500" : "text-rose-500"}`}>
                           {history.disease}

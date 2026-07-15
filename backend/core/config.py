@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str = "your_jwt_secret_key"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    OPENROUTER_API_KEY: str = "YOUR_OPENROUTER_API_KEY"
+    OPENWEATHER_API_KEY: str = "YOUR_OPENWEATHER_API_KEY"
     
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"),

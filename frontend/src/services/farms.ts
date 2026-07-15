@@ -20,4 +20,9 @@ export const farmsService = {
   deleteFarm: async (farmId: number): Promise<void> => {
     await api.delete(`/farms/${farmId}`);
   },
+
+  updateFarm: async (farmId: number, data: Partial<FarmCreate>): Promise<Farm> => {
+    const response = await api.put<Farm>(`/farms/${farmId}`, data);
+    return response.data;
+  },
 };

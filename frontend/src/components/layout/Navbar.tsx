@@ -50,7 +50,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="h-14 flex items-center justify-between px-4 sm:px-6 border-b border-black/[0.1] dark:border-white/[0.06] bg-white/40 dark:bg-black/20 backdrop-blur-2xl z-30 relative">
+    <header className="h-14 flex items-center justify-between px-4 sm:px-6 bg-background z-30 relative neo-box-sm rounded-none border-b-0">
       {/* Left: Mobile menu + Search */}
       <div className="flex items-center gap-3 flex-1">
         {/* Mobile sidebar trigger */}

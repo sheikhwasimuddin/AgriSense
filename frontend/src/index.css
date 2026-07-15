@@ -6,48 +6,60 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 215 28% 90%;
     --foreground: 222 47% 11%;
-    --card: 0 0% 100%;
+    --card: 215 28% 90%;
     --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
+    --popover: 215 28% 90%;
     --popover-foreground: 240 10% 3.9%;
     --primary: 160 84% 39%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 4.8% 95.9%;
+    --secondary: 215 28% 85%;
     --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
+    --muted: 215 28% 85%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
+    --accent: 215 28% 85%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
+    --border: 215 20% 80%;
+    --input: 215 20% 80%;
     --ring: 160 84% 39%;
-    --radius: 0.75rem;
+    --radius: 1rem;
+    
+    /* Neumorphism Shadows - Light */
+    --neo-shadow: 6px 6px 12px #bec3c9, -6px -6px 12px #ffffff;
+    --neo-shadow-inset: inset 6px 6px 12px #bec3c9, inset -6px -6px 12px #ffffff;
+    --neo-shadow-sm: 3px 3px 6px #bec3c9, -3px -3px 6px #ffffff;
+    --neo-shadow-inset-sm: inset 3px 3px 6px #bec3c9, inset -3px -3px 6px #ffffff;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 226 21% 16%;
     --foreground: 0 0% 95%;
-    --card: 240 10% 3.9%;
+    --card: 226 21% 16%;
     --card-foreground: 0 0% 95%;
-    --popover: 240 10% 3.9%;
+    --popover: 226 21% 16%;
     --popover-foreground: 0 0% 95%;
     --primary: 160 84% 39%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 3.7% 15.9%;
+    --secondary: 226 21% 12%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
+    --muted: 226 21% 12%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
+    --accent: 226 21% 12%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 226 15% 10%;
+    --input: 226 15% 10%;
     --ring: 160 84% 39%;
+    
+    /* Neumorphism Shadows - Dark */
+    --neo-shadow: 6px 6px 12px #16181d, -6px -6px 12px #2a2e39;
+    --neo-shadow-inset: inset 6px 6px 12px #16181d, inset -6px -6px 12px #2a2e39;
+    --neo-shadow-sm: 3px 3px 6px #16181d, -3px -3px 6px #2a2e39;
+    --neo-shadow-inset-sm: inset 3px 3px 6px #16181d, inset -3px -3px 6px #2a2e39;
   }
 }
 
@@ -56,88 +68,69 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased transition-colors duration-500;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
-/* Glass morphism */
-.glass {
-  @apply bg-white dark:bg-white/[0.03] backdrop-blur-xl border border-black/10 dark:border-white/[0.08] shadow-2xl;
+/* Neumorphism Base Classes */
+.neo-box {
+  background: hsl(var(--background));
+  box-shadow: var(--neo-shadow);
+  border-radius: var(--radius);
+  border: none;
 }
 
-/* Dot pattern background */
+.neo-box-sm {
+  background: hsl(var(--background));
+  box-shadow: var(--neo-shadow-sm);
+  border-radius: calc(var(--radius) - 0.25rem);
+  border: none;
+}
+
+.neo-inset {
+  background: hsl(var(--background));
+  box-shadow: var(--neo-shadow-inset);
+  border-radius: var(--radius);
+  border: none;
+}
+
+.neo-inset-sm {
+  background: hsl(var(--background));
+  box-shadow: var(--neo-shadow-inset-sm);
+  border-radius: calc(var(--radius) - 0.25rem);
+  border: none;
+}
+
+.neo-button {
+  background: hsl(var(--background));
+  box-shadow: var(--neo-shadow-sm);
+  border-radius: var(--radius);
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.neo-button:active {
+  box-shadow: var(--neo-shadow-inset-sm);
+}
+
+.neo-button:hover:not(:active) {
+  transform: translateY(-1px);
+  box-shadow: var(--neo-shadow);
+}
+
+/* Replacing old glassmorphism class for backwards compatibility during migration */
+.glass {
+  @apply neo-box;
+}
+
+/* Dot pattern background - tailored for Neumorphism */
 .dot-pattern {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 .dark .dot-pattern {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-}
-
-/* Grid pattern */
-.grid-pattern {
-  background-image: 
-    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-  background-size: 64px 64px;
-}
-.dark .grid-pattern {
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-}
-
-/* Animated gradient text */
-.gradient-text {
-  @apply text-transparent bg-clip-text;
-  background-image: linear-gradient(135deg, #10b981, #06b6d4, #8b5cf6, #10b981);
-  background-size: 300% 300%;
-  animation: gradient-shift 8s ease infinite;
-}
-
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-/* Glow effect */
-.glow {
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), 0 0 60px rgba(16, 185, 129, 0.05);
-}
-
-.glow-lg {
-  box-shadow: 0 0 40px rgba(16, 185, 129, 0.2), 0 0 120px rgba(16, 185, 129, 0.08);
-}
-
-/* Animated border gradient */
-@keyframes border-rotate {
-  0% { --border-angle: 0deg; }
-  100% { --border-angle: 360deg; }
-}
-
-.animated-border {
-  position: relative;
-  overflow: hidden;
-}
-
-.animated-border::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: conic-gradient(from var(--border-angle, 0deg), transparent 40%, #10b981, #06b6d4, transparent 60%);
-  border-radius: inherit;
-  animation: border-rotate 4s linear infinite;
-  z-index: -1;
-}
-
-.animated-border::after {
-  content: '';
-  position: absolute;
-  inset: 1px;
-  background: hsl(var(--background));
-  border-radius: inherit;
-  z-index: -1;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
 /* Beam / spotlight effect */
@@ -225,7 +218,8 @@
 
 /* Form input focus */
 input:focus, select:focus, textarea:focus {
-  @apply ring-2 ring-emerald-500/30 border-emerald-500/50;
+  @apply ring-0 outline-none border-transparent;
+  box-shadow: var(--neo-shadow-inset) !important;
 }
 
 /* Selection */
