@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { tasksService, CropTaskCreate } from "@/services/tasks";
+import { tasksService, type CropTaskCreate } from "@/services/tasks";
 import { farmsService } from "@/services/farms";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
